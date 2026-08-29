@@ -174,6 +174,160 @@ if (memoryBoard) {
 }
 
 // ================================================================
+// CONNECT THE DOTS GAME
+// ================================================================
+const dotsCanvas = document.getElementById('dots-canvas');
+
+if (dotsCanvas) {
+  const ctx = dotsCanvas.getContext('2d');
+  const nextNumEl = document.getElementById('dots-next-num');
+  const messageEl = document.getElementById('dots-message');
+  const nextBtn = document.getElementById('dots-next');
+  const progressFill = document.getElementById('dots-next-fill');
+  let advanceTimeout = null;
+
+  const SHAPES = [
+    {
+      name: 'ster',
+      points: [
+        [50, 10], [59.4, 37.06], [88.04, 37.64], [65.22, 54.94], [73.51, 82.36],
+        [50, 66], [26.49, 82.36], [34.78, 54.94], [11.96, 37.64], [40.6, 37.06],
+      ],
+    },
+    {
+      name: 'huis',
+      points: [
+        [20, 90], [80, 90], [80, 45], [50, 10], [20, 45], [20, 90],
+      ],
+    },
+    {
+      name: 'vis',
+      points: [
+        [10, 50], [35, 25], [60, 20], [85, 30], [100, 50], [85, 70], [60, 80], [35, 75], [10, 50],
+      ],
+    },
+  ];
+
+  let width, height;
+  let current = null;
+  let nextIndex = 0;
+
+  function pickShape() {
+    let next;
+    do {
+      next = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+    } while (current && next.name === current.name && SHAPES.length > 1);
+    return next;
+  }
+
+  function resizeCanvas() {
+    const rect = dotsCanvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    dotsCanvas.width = rect.width * dpr;
+    dotsCanvas.height = rect.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    width = rect.width;
+    height = rect.height;
+    draw();
+  }
+
+  function toAbs(point) {
+    const margin = 30;
+    return [
+      margin + (point[0] / 100) * (width - margin * 2),
+      margin + (point[1] / 100) * (height - margin * 2),
+    ];
+  }
+
+  function draw() {
+    if (!current || !width) return;
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#FF6B6B';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    for (let i = 0; i < nextIndex; i++) {
+      const [x, y] = toAbs(current.points[i]);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    current.points.forEach((point, i) => {
+      const [x, y] = toAbs(point);
+      const isDone = i < nextIndex;
+      const isNext = i === nextIndex;
+      ctx.beginPath();
+      ctx.arc(x, y, isNext ? 12 : 9, 0, Math.PI * 2);
+      ctx.fillStyle = isDone ? '#6BCB77' : isNext ? '#FFD93D' : '#B983FF';
+      ctx.fill();
+
+      if (!isDone) {
+        ctx.fillStyle = '#2E2A4A';
+        ctx.font = 'bold 13px "Comic Sans MS", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(i + 1), x, y - 16);
+      }
+    });
+  }
+
+  function handlePick(clientX, clientY) {
+    if (!current || nextIndex >= current.points.length) return;
+    const rect = dotsCanvas.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const clickY = clientY - rect.top;
+    const [tx, ty] = toAbs(current.points[nextIndex]);
+    const dist = Math.hypot(clickX - tx, clickY - ty);
+
+    if (dist <= 26) {
+      nextIndex++;
+      draw();
+      if (nextIndex >= current.points.length) {
+        nextNumEl.textContent = '🎉';
+        messageEl.textContent = '🎉 Prachtig! Je hebt de tekening voltooid!';
+        messageEl.style.color = 'var(--green)';
+        nextBtn.hidden = false;
+        startAutoAdvanceBar(progressFill);
+        advanceTimeout = setTimeout(newShape, 2500);
+      } else {
+        nextNumEl.textContent = String(nextIndex + 1);
+      }
+    }
+  }
+
+  dotsCanvas.addEventListener('click', (e) => handlePick(e.clientX, e.clientY));
+  dotsCanvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    if (touch) handlePick(touch.clientX, touch.clientY);
+  }, { passive: false });
+
+  function newShape() {
+    current = pickShape();
+    nextIndex = 0;
+    nextNumEl.textContent = '1';
+    messageEl.textContent = '';
+    nextBtn.hidden = true;
+    if (advanceTimeout) clearTimeout(advanceTimeout);
+    resetAutoAdvanceBar(progressFill);
+    draw();
+  }
+
+  nextBtn.addEventListener('click', newShape);
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route === 'stippen') resizeCanvas();
+  });
+
+  newShape();
+  resizeCanvas();
+}
+
+// ================================================================
 // CATCH THE STARS GAME
 // ================================================================
 const starsCanvas = document.getElementById('stars-canvas');
