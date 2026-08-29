@@ -194,7 +194,7 @@ img { max-width: 100%; }
   color: #fff;
 }
 
-.memory-stats, .stars-stats, .dots-stats {
+.memory-stats, .stars-stats {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -259,7 +259,7 @@ img { max-width: 100%; }
   touch-action: none;
 }
 
-#stars-canvas, #dots-canvas {
+#stars-canvas {
   display: block;
   width: 100%;
   height: 340px;
@@ -601,5 +601,5 @@ img { max-width: 100%; }
   .memory-board { grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
   .memory-card { font-size: 1.5rem; }
 
-  #stars-canvas, #dots-canvas { height: 280px; }
+  #stars-canvas { height: 280px; }
 }

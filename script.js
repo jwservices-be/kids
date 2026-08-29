@@ -174,238 +174,6 @@ if (memoryBoard) {
 }
 
 // ================================================================
-// CONNECT THE DOTS GAME
-// ================================================================
-const dotsCanvas = document.getElementById('dots-canvas');
-
-if (dotsCanvas) {
-  const ctx = dotsCanvas.getContext('2d');
-  const nextNumEl = document.getElementById('dots-next-num');
-  const messageEl = document.getElementById('dots-message');
-  const nextBtn = document.getElementById('dots-next');
-  const progressFill = document.getElementById('dots-next-fill');
-  let advanceTimeout = null;
-
-  const SHAPES = [
-    {
-      name: 'ster',
-      points: [
-        [50, 10], [59.4, 37.06], [88.04, 37.64], [65.22, 54.94], [73.51, 82.36],
-        [50, 66], [26.49, 82.36], [34.78, 54.94], [11.96, 37.64], [40.6, 37.06],
-      ],
-    },
-    {
-      name: 'huis',
-      points: [
-        [20, 90], [80, 90], [80, 45], [50, 10], [20, 45],
-      ],
-    },
-    {
-      name: 'vis',
-      points: [
-        [10, 50], [35, 25], [60, 20], [85, 30], [100, 50], [85, 70], [60, 80], [35, 75],
-      ],
-    },
-    {
-      name: 'hart',
-      points: [
-        [50, 30], [35, 10], [15, 25], [10, 45], [30, 70], [50, 90], [70, 70], [90, 45], [85, 25], [65, 10],
-      ],
-    },
-    {
-      name: 'bloem',
-      points: [
-        [80, 45], [58.49, 53.49], [50, 75], [41.51, 53.49], [20, 45], [41.51, 36.51], [50, 15], [58.49, 36.51],
-      ],
-    },
-    {
-      name: 'zon',
-      points: [
-        [50, 8], [63, 27.48], [86.37, 29], [76, 50], [86.37, 71], [63, 72.52],
-        [50, 92], [37, 72.52], [13.63, 71], [24, 50], [13.63, 29], [37, 27.48],
-      ],
-    },
-    {
-      name: 'boom',
-      points: [
-        [50, 10], [65, 35], [80, 35], [68, 55], [85, 55], [70, 75], [60, 75],
-        [60, 90], [40, 90], [40, 75], [30, 75], [15, 55], [32, 55], [20, 35], [35, 35],
-      ],
-    },
-    {
-      name: 'vlinder',
-      points: [
-        [50, 50], [20, 20], [35, 45], [15, 70], [50, 58], [85, 70], [65, 45], [80, 20],
-      ],
-    },
-    {
-      name: 'ballon',
-      points: [
-        [50, 10], [71.2, 18.8], [80, 40], [71.2, 61.2], [50, 70], [28.8, 61.2], [20, 40], [28.8, 18.8],
-        [35, 78], [50, 90], [42, 96],
-      ],
-    },
-    {
-      name: 'ijsje',
-      points: [
-        [30, 40], [35, 15], [50, 10], [65, 15], [70, 40], [50, 90],
-      ],
-    },
-    {
-      name: 'appel',
-      points: [
-        [50, 20], [74.75, 30.25], [85, 55], [74.75, 79.75], [50, 90],
-        [25.25, 79.75], [15, 55], [25.25, 30.25], [48, 15], [60, 8],
-      ],
-    },
-    {
-      name: 'kat',
-      points: [
-        [15, 20], [28, 45], [20, 60], [30, 85], [70, 85], [80, 60],
-        [72, 45], [85, 20], [65, 35], [50, 30], [35, 35],
-      ],
-    },
-    {
-      name: 'hond',
-      points: [
-        [15, 35], [25, 55], [20, 70], [30, 88], [70, 88], [80, 70],
-        [75, 55], [85, 35], [65, 25], [50, 20], [35, 25],
-      ],
-    },
-    {
-      name: 'boot',
-      points: [
-        [20, 80], [80, 80], [65, 95], [35, 95], [50, 80], [50, 20], [80, 65], [52, 80],
-      ],
-    },
-    {
-      name: 'paraplu',
-      points: [
-        [10, 55], [25, 25], [50, 15], [75, 25], [90, 55], [50, 55], [50, 80], [65, 90],
-      ],
-    },
-  ];
-
-  let width, height;
-  let current = null;
-  let nextIndex = 0;
-
-  function pickShape() {
-    let next;
-    do {
-      next = SHAPES[Math.floor(Math.random() * SHAPES.length)];
-    } while (current && next.name === current.name && SHAPES.length > 1);
-    return next;
-  }
-
-  function resizeCanvas() {
-    const rect = dotsCanvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    dotsCanvas.width = rect.width * dpr;
-    dotsCanvas.height = rect.height * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    width = rect.width;
-    height = rect.height;
-    draw();
-  }
-
-  function toAbs(point) {
-    const margin = 30;
-    return [
-      margin + (point[0] / 100) * (width - margin * 2),
-      margin + (point[1] / 100) * (height - margin * 2),
-    ];
-  }
-
-  function draw() {
-    if (!current || !width) return;
-    ctx.clearRect(0, 0, width, height);
-
-    ctx.strokeStyle = '#FF6B6B';
-    ctx.lineWidth = 4;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    for (let i = 0; i < nextIndex; i++) {
-      const [x, y] = toAbs(current.points[i]);
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    current.points.forEach((point, i) => {
-      const [x, y] = toAbs(point);
-      const isDone = i < nextIndex;
-      const isNext = i === nextIndex;
-      ctx.beginPath();
-      ctx.arc(x, y, isNext ? 12 : 9, 0, Math.PI * 2);
-      ctx.fillStyle = isDone ? '#6BCB77' : isNext ? '#FFD93D' : '#B983FF';
-      ctx.fill();
-
-      if (!isDone) {
-        ctx.fillStyle = '#2E2A4A';
-        ctx.font = 'bold 13px "Comic Sans MS", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(String(i + 1), x, y - 16);
-      }
-    });
-  }
-
-  function handlePick(clientX, clientY) {
-    if (!current || nextIndex >= current.points.length) return;
-    const rect = dotsCanvas.getBoundingClientRect();
-    const clickX = clientX - rect.left;
-    const clickY = clientY - rect.top;
-    const [tx, ty] = toAbs(current.points[nextIndex]);
-    const dist = Math.hypot(clickX - tx, clickY - ty);
-
-    if (dist <= 26) {
-      nextIndex++;
-      draw();
-      if (nextIndex >= current.points.length) {
-        nextNumEl.textContent = '🎉';
-        messageEl.textContent = '🎉 Prachtig! Je hebt de tekening voltooid!';
-        messageEl.style.color = 'var(--green)';
-        nextBtn.hidden = false;
-        startAutoAdvanceBar(progressFill);
-        advanceTimeout = setTimeout(newShape, 2500);
-      } else {
-        nextNumEl.textContent = String(nextIndex + 1);
-      }
-    }
-  }
-
-  dotsCanvas.addEventListener('click', (e) => handlePick(e.clientX, e.clientY));
-  dotsCanvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    if (touch) handlePick(touch.clientX, touch.clientY);
-  }, { passive: false });
-
-  function newShape() {
-    current = pickShape();
-    nextIndex = 0;
-    nextNumEl.textContent = '1';
-    messageEl.textContent = '';
-    nextBtn.hidden = true;
-    if (advanceTimeout) clearTimeout(advanceTimeout);
-    resetAutoAdvanceBar(progressFill);
-    draw();
-  }
-
-  nextBtn.addEventListener('click', newShape);
-
-  window.addEventListener('resize', resizeCanvas);
-  window.addEventListener('routechange', (e) => {
-    if (e.detail.route === 'stippen') resizeCanvas();
-  });
-
-  newShape();
-  resizeCanvas();
-}
-
-// ================================================================
 // CATCH THE STARS GAME
 // ================================================================
 const starsCanvas = document.getElementById('stars-canvas');
@@ -944,17 +712,32 @@ if (lettersWordEl) {
     { before: 'ba', after: '', correct: 'nk', options: ['ns', 'kn', 'nk'] },
   ];
 
+  const setupEl = document.getElementById('letters-setup');
+  const playEl = document.getElementById('letters-play');
+  const countInput = document.getElementById('letters-count-input');
+  const startSetupBtn = document.getElementById('letters-start');
+  const countEl = document.getElementById('letters-count');
   const scoreEl = document.getElementById('letters-score');
   const wrongStatEl = document.getElementById('letters-wrong');
+  const activeEl = document.getElementById('letters-active');
+  const doneEl = document.getElementById('letters-done');
+  const finalScoreEl = document.getElementById('letters-final-score');
+  const finalMaxEl = document.getElementById('letters-final-max');
+  const restartRoundBtn = document.getElementById('letters-restart');
   const optionsEl = document.getElementById('letters-options');
   const messageEl = document.getElementById('letters-message');
   const nextBtn = document.getElementById('letters-next');
   const progressFill = document.getElementById('letters-next-fill');
   let advanceTimeout = null;
 
+  clampInputRange(countInput, 1, 99);
+
   let current = null;
   let score = 0;
   let wrongTotal = 0;
+  let correctCount = 0;
+  let sumIndex = 0;
+  let sumsPerRound = 10;
   let answered = false;
   let hadErrorThisWord = false;
 
@@ -989,6 +772,7 @@ if (lettersWordEl) {
       btn.classList.add('correct');
       if (!hadErrorThisWord) {
         score += 1;
+        correctCount++;
         scoreEl.textContent = String(score);
       }
       messageEl.textContent = '🎉 Juist!';
@@ -1009,6 +793,17 @@ if (lettersWordEl) {
   }
 
   function newWord() {
+    if (sumIndex >= sumsPerRound) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      finalScoreEl.textContent = String(correctCount);
+      finalMaxEl.textContent = String(sumsPerRound);
+      setDoneMessage(correctCount / sumsPerRound, 'letters-done-emoji', 'letters-done-title');
+      return;
+    }
+
+    sumIndex++;
+    countEl.textContent = String(sumIndex);
     current = pickWord();
     answered = false;
     hadErrorThisWord = false;
@@ -1026,6 +821,32 @@ if (lettersWordEl) {
     });
   }
 
+  function startRound() {
+    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    document.getElementById('letters-max').textContent = String(sumsPerRound);
+    score = 0;
+    wrongTotal = 0;
+    correctCount = 0;
+    sumIndex = 0;
+    scoreEl.textContent = '0';
+    wrongStatEl.textContent = '0';
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    newWord();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startSetupBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', newWord);
-  newWord();
+  restartRoundBtn.addEventListener('click', backToSetup);
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'letters' && !playEl.hidden) backToSetup();
+  });
 }

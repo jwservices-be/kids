@@ -6,7 +6,7 @@
 <title>Waerlop spelen — Leuke spelletjes voor kids</title>
 <meta name="description" content="Een speelplein vol leuke spelletjes: geheugenspel, sterren vangen en een woordraadspel. Speel op je telefoon, tablet of computer!">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎈</text></svg>">
-<link rel="stylesheet" href="style.css?v=20260829f">
+<link rel="stylesheet" href="style.css?v=20260829h">
 </head>
 <body>
 
@@ -40,10 +40,6 @@
     <a href="#letters" class="game-card" data-route="letters" style="--card-color:#B983FF">
       <span class="card-emoji">✏️</span>
       <span class="card-title">Letters invullen</span>
-    </a>
-    <a href="#stippen" class="game-card" data-route="stippen" style="--card-color:#FF9F43">
-      <span class="card-emoji">🔗</span>
-      <span class="card-title">Verbind de puntjes</span>
     </a>
     <a href="#sterren" class="game-card" data-route="sterren" style="--card-color:#4D96FF">
       <span class="card-emoji">⭐</span>
@@ -165,38 +161,41 @@
   <section id="letters" class="game-section game-page">
     <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>✏️ Letters invullen</h2>
-    <p class="game-intro">Welke letters horen in het woord? Kies de juiste!</p>
-    <div class="letters-stats">
-      <span>Score: <strong id="letters-score">0</strong></span>
-      <span>Fout: <strong id="letters-wrong">0</strong></span>
-    </div>
-    <div class="letters-card">
-      <div id="letters-word" class="letters-word"></div>
-      <div id="letters-options" class="letters-options"></div>
-      <p id="letters-message" class="guess-message"></p>
-      <button id="letters-next" class="btn btn-small btn-progress" hidden>
-        <span id="letters-next-fill" class="btn-progress-fill"></span>
-        <span class="btn-progress-label">➡️ Volgende ➡️</span>
-      </button>
-    </div>
-  </section>
+    <p class="game-intro">Welke letters horen in het woord? Kies hoeveel oefeningen je wilt maken.</p>
 
-  <!-- CONNECT THE DOTS GAME -->
-  <section id="stippen" class="game-section game-page">
-    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
-    <h2>🔗 Verbind de puntjes</h2>
-    <p class="game-intro">Klik de stipjes aan in de juiste volgorde (1, 2, 3, ...) om de tekening te onthullen!</p>
-    <div class="dots-stats">
-      <span>Volgend nummer: <strong id="dots-next-num">1</strong></span>
+    <div id="letters-setup" class="reken-setup">
+      <div class="reken-count-picker">
+        <label for="letters-count-input">Aantal oefeningen:</label>
+        <input type="number" id="letters-count-input" min="1" max="99" value="10">
+      </div>
+      <button id="letters-start" class="btn btn-big">▶️ Start</button>
     </div>
-    <div class="canvas-wrap">
-      <canvas id="dots-canvas"></canvas>
+
+    <div id="letters-play" hidden>
+      <div class="letters-stats">
+        <span>Woord <strong id="letters-count">1</strong> van <strong id="letters-max">10</strong></span>
+        <span>Score: <strong id="letters-score">0</strong></span>
+        <span>Fout: <strong id="letters-wrong">0</strong></span>
+      </div>
+      <div class="letters-card">
+        <div id="letters-active">
+          <div id="letters-word" class="letters-word"></div>
+          <div id="letters-options" class="letters-options"></div>
+          <p id="letters-message" class="guess-message"></p>
+          <button id="letters-next" class="btn btn-small btn-progress" hidden>
+            <span id="letters-next-fill" class="btn-progress-fill"></span>
+            <span class="btn-progress-label">➡️ Volgende ➡️</span>
+          </button>
+        </div>
+        <div id="letters-done" class="reken-done" hidden>
+          <div id="letters-done-emoji" class="reken-done-emoji">🏆</div>
+          <p id="letters-done-title" class="reken-done-title">Proficiat!</p>
+          <p class="reken-done-score"><strong id="letters-final-score"></strong> / <strong id="letters-final-max"></strong></p>
+          <p class="reken-done-sub">woorden goed!</p>
+          <button id="letters-restart" class="btn btn-big">🔄 Nieuwe ronde</button>
+        </div>
+      </div>
     </div>
-    <p id="dots-message" class="guess-message"></p>
-    <button id="dots-next" class="btn btn-small btn-progress" hidden>
-      <span id="dots-next-fill" class="btn-progress-fill"></span>
-      <span class="btn-progress-label">➡️ Volgende figuur ➡️</span>
-    </button>
   </section>
 
   <!-- CATCH THE STARS GAME -->
@@ -229,6 +228,6 @@
   <p>Gemaakt met ❤️ voor kleine avonturiers &mdash; <span id="year"></span></p>
 </footer>
 
-<script src="script.js?v=20260829f"></script>
+<script src="script.js?v=20260829h"></script>
 </body>
 </html>
