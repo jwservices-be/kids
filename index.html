@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Speelplein — Leuke spelletjes voor kids</title>
+<meta name="description" content="Een speelplein vol leuke spelletjes: geheugenspel, sterren vangen en een woordraadspel. Speel op je telefoon, tablet of computer!">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎈</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <span class="logo">🎈 Speelplein</span>
+    <nav class="site-nav" id="site-nav">
+      <a href="#geheugen">Geheugenspel</a>
+      <a href="#sterren">Sterren vangen</a>
+      <a href="#raad">Woordraadsel</a>
+    </nav>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-blob blob-3"></div>
+    <h1>Welkom op het Speelplein! 🎉</h1>
+    <p>Kies een spelletje hieronder en speel zoveel je wilt. Werkt op je computer én op je telefoon!</p>
+    <a href="#games" class="btn btn-big">Begin met spelen ⬇️</a>
+  </section>
+
+  <section id="games" class="games-nav">
+    <a href="#geheugen" class="game-card" style="--card-color:#FF6B6B">
+      <span class="card-emoji">🧠</span>
+      <span class="card-title">Geheugenspel</span>
+    </a>
+    <a href="#sterren" class="game-card" style="--card-color:#4D96FF">
+      <span class="card-emoji">⭐</span>
+      <span class="card-title">Sterren vangen</span>
+    </a>
+    <a href="#raad" class="game-card" style="--card-color:#6BCB77">
+      <span class="card-emoji">🔤</span>
+      <span class="card-title">Woordraadsel</span>
+    </a>
+  </section>
+
+  <!-- MEMORY GAME -->
+  <section id="geheugen" class="game-section">
+    <h2>🧠 Geheugenspel</h2>
+    <p class="game-intro">Vind alle paren! Tik op een kaartje om het om te draaien.</p>
+    <div class="memory-stats">
+      <span>Zetten: <strong id="memory-moves">0</strong></span>
+      <button id="memory-restart" class="btn btn-small">🔄 Opnieuw</button>
+    </div>
+    <div id="memory-board" class="memory-board"></div>
+    <p id="memory-win" class="win-message" hidden>🎉 Gewonnen! Goed gedaan!</p>
+  </section>
+
+  <!-- CATCH THE STARS GAME -->
+  <section id="sterren" class="game-section">
+    <h2>⭐ Sterren vangen</h2>
+    <p class="game-intro">Beweeg de mand met je vinger (of muis) en vang zoveel mogelijk sterren!</p>
+    <div class="stars-stats">
+      <span>Score: <strong id="stars-score">0</strong></span>
+      <span>Tijd: <strong id="stars-time">30</strong>s</span>
+      <button id="stars-restart" class="btn btn-small">🔄 Opnieuw</button>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="stars-canvas"></canvas>
+      <div id="stars-overlay" class="canvas-overlay">
+        <button id="stars-start" class="btn btn-big">▶️ Start spel</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORD GUESS GAME -->
+  <section id="raad" class="game-section">
+    <h2>🔤 Woordraadsel</h2>
+    <p class="game-intro">Raad het dier aan de hand van de emoji-hint!</p>
+    <div class="guess-card">
+      <div id="guess-emoji" class="guess-emoji">🐶</div>
+      <div id="guess-word" class="guess-word"></div>
+      <div id="guess-letters" class="guess-letters"></div>
+      <p id="guess-message" class="guess-message"></p>
+      <button id="guess-next" class="btn btn-small">➡️ Volgende dier</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Gemaakt met ❤️ voor kleine avonturiers &mdash; <span id="year"></span></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
