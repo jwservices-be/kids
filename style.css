@@ -549,6 +549,18 @@ img { max-width: 100%; }
   margin-bottom: 1rem;
 }
 
+#zinnen-sentence.letters-word {
+  font-size: 1.5rem;
+  letter-spacing: normal;
+}
+
+#zinnen-sentence .blank {
+  display: inline-block;
+  min-width: 90px;
+  border-bottom: 3px solid var(--purple);
+  color: var(--pink);
+}
+
 .letters-word .blank {
   color: var(--pink);
 }

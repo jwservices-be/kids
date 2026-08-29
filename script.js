@@ -1132,3 +1132,166 @@ if (lettersWordEl) {
     if (e.detail.route !== 'letters' && !playEl.hidden) backToSetup();
   });
 }
+
+// ================================================================
+// ZINNEN VORMEN
+// ================================================================
+const zinnenSentenceEl = document.getElementById('zinnen-sentence');
+
+if (zinnenSentenceEl) {
+  const SENTENCES = [
+    { before: 'De kat ', after: ' een muis.', correct: 'eet', options: ['eet', 'vaart', 'zingt'] },
+    { before: 'Hij speelt met ', after: '.', correct: 'vuur', options: ['vuur', 'wolk', 'brood'] },
+    { before: '', after: ' zit in de trein.', correct: 'Roel', options: ['Roel', 'Zout', 'Ziet'] },
+    { before: 'Piet gaat naar ', after: '.', correct: 'huis', options: ['huis', 'hooi', 'mooi'] },
+    { before: 'Mijn ', after: ' is lief.', correct: 'juf', options: ['juf', 'tafel', 'fiets'] },
+    { before: 'De pauw is een ', after: '.', correct: 'dier', options: ['dier', 'touw', 'stoel'] },
+    { before: 'Zij ', after: ' soep.', correct: 'kookt', options: ['kookt', 'springt', 'leest'] },
+    { before: 'De soep is ', after: '.', correct: 'heet', options: ['heet', 'groen', 'hoog'] },
+    { before: 'De ', after: ' valt van de boom.', correct: 'appel', options: ['appel', 'koe', 'tafel'] },
+    { before: 'Aap rijmt op ', after: '.', correct: 'schaap', options: ['schaap', 'huis', 'bal'] },
+    { before: 'De zon schijnt aan de ', after: '.', correct: 'hemel', options: ['hemel', 'grond', 'tafel'] },
+    { before: 'Wij gaan naar het ', after: ' zwemmen.', correct: 'zwembad', options: ['zwembad', 'dak', 'bos'] },
+    { before: 'De hond ', after: ' hard.', correct: 'blaft', options: ['blaft', 'zingt', 'leest'] },
+    { before: 'Ik lees een ', after: ' boek.', correct: 'leuk', options: ['leuk', 'snel', 'hoog'] },
+    { before: 'De vis zwemt in het ', after: '.', correct: 'water', options: ['water', 'vuur', 'zand'] },
+  ];
+
+  const setupEl = document.getElementById('zinnen-setup');
+  const playEl = document.getElementById('zinnen-play');
+  const countInput = document.getElementById('zinnen-count-input');
+  const startSetupBtn = document.getElementById('zinnen-start');
+  const countEl = document.getElementById('zinnen-count');
+  const scoreEl = document.getElementById('zinnen-score');
+  const wrongStatEl = document.getElementById('zinnen-wrong');
+  const activeEl = document.getElementById('zinnen-active');
+  const doneEl = document.getElementById('zinnen-done');
+  const finalScoreEl = document.getElementById('zinnen-final-score');
+  const finalMaxEl = document.getElementById('zinnen-final-max');
+  const restartRoundBtn = document.getElementById('zinnen-restart');
+  const optionsEl = document.getElementById('zinnen-options');
+  const messageEl = document.getElementById('zinnen-message');
+  const nextBtn = document.getElementById('zinnen-next');
+  const progressFill = document.getElementById('zinnen-next-fill');
+  let advanceTimeout = null;
+
+  clampInputRange(countInput, 1, 99);
+
+  let current = null;
+  let score = 0;
+  let wrongTotal = 0;
+  let correctCount = 0;
+  let sumIndex = 0;
+  let sumsPerRound = 10;
+  let answered = false;
+  let hadErrorThisSentence = false;
+
+  function pickSentence() {
+    let next;
+    do {
+      next = SENTENCES[Math.floor(Math.random() * SENTENCES.length)];
+    } while (current && next === current && SENTENCES.length > 1);
+    return next;
+  }
+
+  function shuffle(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function renderSentence(filled) {
+    const blank = filled || '___';
+    zinnenSentenceEl.innerHTML = `${current.before}<span class="blank">${blank}</span>${current.after}`;
+  }
+
+  function handleChoice(option, btn) {
+    if (answered) return;
+
+    if (option === current.correct) {
+      answered = true;
+      optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
+      btn.classList.add('correct');
+      if (!hadErrorThisSentence) {
+        score += 1;
+        correctCount++;
+        scoreEl.textContent = String(score);
+      }
+      messageEl.textContent = '🎉 Juist!';
+      messageEl.style.color = 'var(--green)';
+      renderSentence(current.correct);
+      nextBtn.hidden = false;
+      startAutoAdvanceBar(progressFill);
+      advanceTimeout = setTimeout(newSentence, 2000);
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+      hadErrorThisSentence = true;
+      wrongTotal++;
+      wrongStatEl.textContent = String(wrongTotal);
+      messageEl.textContent = `"${option}" is niet juist, probeer nog eens`;
+      messageEl.style.color = 'var(--pink)';
+    }
+  }
+
+  function newSentence() {
+    if (sumIndex >= sumsPerRound) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      finalScoreEl.textContent = String(correctCount);
+      finalMaxEl.textContent = String(sumsPerRound);
+      setDoneMessage(correctCount / sumsPerRound, 'zinnen-done-emoji', 'zinnen-done-title');
+      return;
+    }
+
+    sumIndex++;
+    countEl.textContent = String(sumIndex);
+    current = pickSentence();
+    answered = false;
+    hadErrorThisSentence = false;
+    messageEl.textContent = '';
+    nextBtn.hidden = true;
+    if (advanceTimeout) clearTimeout(advanceTimeout);
+    resetAutoAdvanceBar(progressFill);
+    renderSentence(null);
+    optionsEl.innerHTML = '';
+    shuffle(current.options).forEach((option) => {
+      const btn = document.createElement('button');
+      btn.textContent = option;
+      btn.addEventListener('click', () => handleChoice(option, btn));
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function startRound() {
+    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    document.getElementById('zinnen-max').textContent = String(sumsPerRound);
+    score = 0;
+    wrongTotal = 0;
+    correctCount = 0;
+    sumIndex = 0;
+    scoreEl.textContent = '0';
+    wrongStatEl.textContent = '0';
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    newSentence();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startSetupBtn.addEventListener('click', startRound);
+  nextBtn.addEventListener('click', newSentence);
+  restartRoundBtn.addEventListener('click', backToSetup);
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'zinnen' && !playEl.hidden) backToSetup();
+  });
+}
