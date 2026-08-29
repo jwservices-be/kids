@@ -149,28 +149,35 @@ if (starsCanvas) {
   const restartBtn = document.getElementById('stars-restart');
 
   const GAME_TIME = 30;
-  const LEVEL_MULTIPLIERS = { makkelijk: 1 / 1.5, gewoon: 1, moeilijk: 1.5 };
+  const LEVEL_CONFIG = {
+    makkelijk: { speedMult: 1 / 3, spawnIntervalMult: 2, basketWidth: 120, ramp: 0 },
+    gewoon: { speedMult: 1, spawnIntervalMult: 1, basketWidth: 70, ramp: 1 },
+    moeilijk: { speedMult: 1.5, spawnIntervalMult: 0.67, basketWidth: 70, ramp: 1 },
+  };
   const SPAWN_INTERVAL_BASE = 700;
-  let levelMultiplier = LEVEL_MULTIPLIERS.gewoon;
+  let level = LEVEL_CONFIG.gewoon;
   let width, height;
   let basketX = 0;
-  const basketWidth = 70;
+  let basketWidth = level.basketWidth;
   const basketHeight = 26;
   let stars = [];
   let score = 0;
+  let missed = 0;
   let timeLeft = GAME_TIME;
   let running = false;
   let rafId = null;
   let timerId = null;
   let lastSpawn = 0;
 
+  const missedEl = document.getElementById('stars-missed');
   const levelButtons = document.querySelectorAll('.stars-level');
   levelButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       if (running) return;
       levelButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      levelMultiplier = LEVEL_MULTIPLIERS[btn.dataset.level];
+      level = LEVEL_CONFIG[btn.dataset.level];
+      basketWidth = level.basketWidth;
     });
   });
 
@@ -189,7 +196,7 @@ if (starsCanvas) {
     stars.push({
       x: Math.random() * (width - 20) + 10,
       y: -20,
-      speed: (1.5 + Math.random() * 2 + Math.min(6, score * 0.05)) * levelMultiplier,
+      speed: (1.5 + Math.random() * 2 + Math.min(6, score * 0.05) * level.ramp) * level.speedMult,
       size: 18 + Math.random() * 10,
     });
   }
@@ -235,7 +242,7 @@ if (starsCanvas) {
     if (!running) return;
     ctx.clearRect(0, 0, width, height);
 
-    if (timestamp - lastSpawn > SPAWN_INTERVAL_BASE / levelMultiplier) {
+    if (timestamp - lastSpawn > SPAWN_INTERVAL_BASE * level.spawnIntervalMult) {
       spawnStar();
       lastSpawn = timestamp;
     }
@@ -249,7 +256,12 @@ if (starsCanvas) {
         scoreEl.textContent = String(score);
         return false;
       }
-      return star.y < height + 30;
+      if (star.y >= height + 30) {
+        missed++;
+        missedEl.textContent = String(missed);
+        return false;
+      }
+      return true;
     });
 
     stars.forEach(drawStar);
@@ -269,11 +281,13 @@ if (starsCanvas) {
   function startGame() {
     resizeCanvas();
     score = 0;
+    missed = 0;
     timeLeft = GAME_TIME;
     stars = [];
     lastSpawn = 0;
     basketX = width / 2;
     scoreEl.textContent = '0';
+    missedEl.textContent = '0';
     timeEl.textContent = String(GAME_TIME);
     overlay.hidden = true;
     running = true;
@@ -287,7 +301,7 @@ if (starsCanvas) {
     clearInterval(timerId);
     overlay.hidden = false;
     overlay.innerHTML = `<div style="text-align:center;color:#fff;">
-      <p style="font-size:1.4rem;font-weight:bold;">🎉 Klaar! Score: ${score}</p>
+      <p style="font-size:1.4rem;font-weight:bold;">🎉 Klaar! Score: ${score} — Gemist: ${missed}</p>
       <button id="stars-play-again" class="btn btn-big">🔄 Speel opnieuw</button>
     </div>`;
     document.getElementById('stars-play-again').addEventListener('click', startGame);
