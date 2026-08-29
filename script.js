@@ -488,6 +488,22 @@ if (rekenProblemEl) {
       doneEl.hidden = false;
       finalScoreEl.textContent = String(correctCount);
       finalMaxEl.textContent = String(sumsPerRound);
+      const ratio = correctCount / sumsPerRound;
+      const doneEmojiEl = document.getElementById('reken-done-emoji');
+      const doneTitleEl = document.getElementById('reken-done-title');
+      if (ratio === 1) {
+        doneEmojiEl.textContent = '🏆';
+        doneTitleEl.textContent = 'Proficiat! Perfecte score!';
+      } else if (ratio >= 0.7) {
+        doneEmojiEl.textContent = '🎉';
+        doneTitleEl.textContent = 'Proficiat! Goed gedaan!';
+      } else if (ratio >= 0.4) {
+        doneEmojiEl.textContent = '👍';
+        doneTitleEl.textContent = 'Goed geprobeerd!';
+      } else {
+        doneEmojiEl.textContent = '💪';
+        doneTitleEl.textContent = 'Blijf oefenen, je kan het!';
+      }
       return;
     }
 
@@ -540,10 +556,8 @@ if (rekenProblemEl) {
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
       nextBtn.hidden = false;
-      if (sumIndex < sumsPerRound) {
-        startAutoAdvanceBar(progressBar, progressFill);
-        advanceTimeout = setTimeout(newProblem, 2000);
-      }
+      startAutoAdvanceBar(progressBar, progressFill);
+      advanceTimeout = setTimeout(newProblem, 2000);
     } else {
       messageEl.textContent = `${given} is niet juist, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
