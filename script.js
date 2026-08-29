@@ -512,23 +512,25 @@ if (rekenProblemEl) {
     if (answered) return;
     const given = Number(answerEl.value);
     if (answerEl.value === '' || Number.isNaN(given)) return;
-    answered = true;
-    answerEl.disabled = true;
 
     if (given === answer) {
+      answered = true;
+      answerEl.disabled = true;
       score += 10;
       correctCount++;
       scoreEl.textContent = String(score);
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
+      nextBtn.hidden = false;
       if (sumIndex < sumsPerRound) {
         setTimeout(newProblem, 2000);
       }
     } else {
-      messageEl.textContent = 'Niet juist, probeer nog eens';
+      messageEl.textContent = `${given} is niet juist, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
+      answerEl.value = '';
+      answerEl.focus();
     }
-    nextBtn.hidden = false;
   }
 
   function startRound() {
