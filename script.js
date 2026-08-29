@@ -1288,6 +1288,41 @@ if (zinnenSentenceEl) {
     { before: 'De hond ', after: ' hard.', correct: 'blaft', options: ['blaft', 'zingt', 'leest'] },
     { before: 'Ik lees een ', after: ' boek.', correct: 'leuk', options: ['leuk', 'snel', 'hoog'] },
     { before: 'De vis zwemt in het ', after: '.', correct: 'water', options: ['water', 'vuur', 'zand'] },
+    { before: 'De vogel vliegt in de ', after: '.', correct: 'lucht', options: ['lucht', 'tafel', 'schoen'] },
+    { before: 'Ik drink een glas ', after: '.', correct: 'melk', options: ['melk', 'stoel', 'hoed'] },
+    { before: 'De banaan is ', after: '.', correct: 'geel', options: ['geel', 'vierkant', 'nat'] },
+    { before: 'Wij spelen buiten in de ', after: '.', correct: 'tuin', options: ['tuin', 'oven', 'kast'] },
+    { before: 'De sneeuw is ', after: '.', correct: 'wit', options: ['wit', 'groen', 'heet'] },
+    { before: 'Mama maakt het eten ', after: '.', correct: 'klaar', options: ['klaar', 'moe', 'ver'] },
+    { before: 'De trein rijdt op de ', after: '.', correct: 'rails', options: ['rails', 'wolk', 'boom'] },
+    { before: 'Papa leest de ', after: ' voor.', correct: 'krant', options: ['krant', 'appel', 'stoel'] },
+    { before: 'Het is winter, het ', after: ' buiten.', correct: 'sneeuwt', options: ['sneeuwt', 'bloeit', 'zwemt'] },
+    { before: 'De bal is ', after: '.', correct: 'rond', options: ['rond', 'vierkant', 'plat'] },
+    { before: 'Ik was mijn handen met ', after: '.', correct: 'zeep', options: ['zeep', 'brood', 'zand'] },
+    { before: 'De leeuw is de ', after: ' van de dieren.', correct: 'koning', options: ['koning', 'dokter', 'bakker'] },
+    { before: 'In de zomer is het ', after: '.', correct: 'warm', options: ['warm', 'koud', 'donker'] },
+    { before: 'De kikker springt in de ', after: '.', correct: 'sloot', options: ['sloot', 'oven', 'kast'] },
+    { before: 'Wij eten \'s ochtends ', after: '.', correct: 'ontbijt', options: ['ontbijt', 'avondeten', 'ijs'] },
+    { before: 'De brandweer blust het ', after: '.', correct: 'vuur', options: ['vuur', 'water', 'ijs'] },
+    { before: 'Het konijn eet een ', after: '.', correct: 'wortel', options: ['wortel', 'steen', 'stoel'] },
+    { before: 'De maan schijnt \'s ', after: '.', correct: 'nachts', options: ['nachts', 'ochtends', 'middags'] },
+    { before: 'Ik trek mijn ', after: ' aan.', correct: 'jas', options: ['jas', 'brood', 'deur'] },
+    { before: 'De boer werkt op de ', after: '.', correct: 'boerderij', options: ['boerderij', 'disco', 'bibliotheek'] },
+    { before: 'Wij zingen een ', after: '.', correct: 'lied', options: ['lied', 'stoel', 'boom'] },
+    { before: 'De spin heeft acht ', after: '.', correct: 'poten', options: ['poten', 'armen', 'staarten'] },
+    { before: 'Het ei komt uit een ', after: '.', correct: 'kip', options: ['kip', 'hond', 'koe'] },
+    { before: 'De sleutel past in het ', after: '.', correct: 'slot', options: ['slot', 'brood', 'water'] },
+    { before: 'Wij poetsen onze ', after: ' elke dag.', correct: 'tanden', options: ['tanden', 'ogen', 'oren'] },
+    { before: 'De wolk is ', after: '.', correct: 'wit', options: ['wit', 'zwart', 'geel'] },
+    { before: 'In het bos wonen veel ', after: '.', correct: 'dieren', options: ['dieren', 'vissen', 'auto\'s'] },
+    { before: 'De kaars geeft ', after: '.', correct: 'licht', options: ['licht', 'water', 'geluid'] },
+    { before: 'Wij fietsen naar ', after: '.', correct: 'school', options: ['school', 'oven', 'kast'] },
+    { before: 'De regen valt uit de ', after: '.', correct: 'wolken', options: ['wolken', 'grond', 'tafel'] },
+    { before: 'De schaar is ', after: '.', correct: 'scherp', options: ['scherp', 'zacht', 'warm'] },
+    { before: 'Wij dragen een ', after: ' als het regent.', correct: 'paraplu', options: ['paraplu', 'zwembroek', 'muts'] },
+    { before: 'De draak spuwt ', after: '.', correct: 'vuur', options: ['vuur', 'water', 'melk'] },
+    { before: 'Het schaap heeft ', after: ' wol.', correct: 'zachte', options: ['zachte', 'harde', 'natte'] },
+    { before: 'Wij vieren vandaag mijn ', after: '.', correct: 'verjaardag', options: ['verjaardag', 'ontbijt', 'huiswerk'] },
   ];
 
   const setupEl = document.getElementById('zinnen-setup');
@@ -1308,7 +1343,7 @@ if (zinnenSentenceEl) {
   const progressFill = document.getElementById('zinnen-next-fill');
   let advanceTimeout = null;
 
-  clampInputRange(countInput, 1, 15);
+  clampInputRange(countInput, 1, 50);
 
   let current = null;
   let score = 0;
@@ -1397,7 +1432,7 @@ if (zinnenSentenceEl) {
   }
 
   function startRound() {
-    sumsPerRound = Math.min(15, Math.max(1, Number(countInput.value) || 10));
+    sumsPerRound = Math.min(50, Math.max(1, Number(countInput.value) || 10));
     document.getElementById('zinnen-max').textContent = String(sumsPerRound);
     score = 0;
     wrongTotal = 0;
