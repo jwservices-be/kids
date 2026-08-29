@@ -1031,7 +1031,7 @@ if (lettersWordEl) {
     { before: 'b', after: 'r', correct: 'uu', options: ['u', 'uu', 'ui'] },
     { before: 'paa', after: '', correct: 'rd', options: ['rf', 'rd', 'sr'] },
     { before: 'n', after: 't', correct: 'oo', options: ['o', 'oo', 'aa'] },
-    { before: 'b', after: 'k', correct: 'ee', options: ['ie', 'ee', 'ei'] },
+    { before: 'z', after: 'p', correct: 'ee', options: ['ie', 'ee', 'ei'] },
     { before: 'h', after: 'l', correct: 'ee', options: ['ee', 'eu', 'uu'] },
     { before: 'ju', after: '', correct: 'f', options: ['v', 'r', 'f'] },
     { before: '', after: 'oen', correct: 'sch', options: ['cht', 'sch', 'ch'] },
@@ -1067,6 +1067,66 @@ if (lettersWordEl) {
     { before: 'k', after: 's', correct: 'u', options: ['u', 'uu'] },
     { before: 'l', after: 's', correct: 'u', options: ['u', 'uu'] },
     { before: 'sch', after: 'r', correct: 'uu', options: ['u', 'uu'] },
+    { before: 'k', after: 'ssen', correct: 'u', options: ['u', 'uu'] },
+    { before: 'm', after: 'ts', correct: 'u', options: ['u', 'uu'] },
+    { before: 'j', after: 'r', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'h', after: 's', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'vl', after: 'g', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'kr', after: 'n', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'v', after: 's', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'l', after: 'rs', correct: 'aa', options: ['aa', 'a'] },
+    { before: '', after: 'p', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'zw', after: 'n', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'k', after: 'rs', correct: 'aa', options: ['aa', 'a'] },
+    { before: 'br', after: 'd', correct: 'oo', options: ['oo', 'o'] },
+    { before: 'str', after: 'm', correct: 'oo', options: ['oo', 'o'] },
+    { before: 'dr', after: 'm', correct: 'oo', options: ['oo', 'o'] },
+    { before: 'sch', after: 'l', correct: 'oo', options: ['oo', 'ie'] },
+    { before: '', after: 'r', correct: 'oo', options: ['oo', 'o'] },
+    { before: 'gr', after: 'p', correct: 'oe', options: ['oe', 'u'] },
+    { before: 'tr', after: 'p', correct: 'oe', options: ['oe', 'u'] },
+    { before: 'sp', after: 'r', correct: 'oo', options: ['oo', 'o'] },
+    { before: 'b', after: 't', correct: 'oo', options: ['oo', 'eu'] },
+    { before: 'f', after: 'ts', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'dr', after: '', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'l', after: 'f', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'd', after: 'p', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'br', after: 'f', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'r', after: 'm', correct: 'ie', options: ['ie', 'i'] },
+    { before: 'd', after: 'f', correct: 'ie', options: ['ie', 'i'] },
+    { before: 't', after: 'd', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'w', after: 's', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'p', after: 'n', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'bl', after: '', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'vr', after: '', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'pr', after: 's', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'f', after: 'n', correct: 'ij', options: ['ei', 'ij'] },
+    { before: 'kl', after: 'n', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'tr', after: 'n', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'g', after: 't', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'z', after: 'l', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'kl', after: '', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'r', after: 's', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'v', after: 'lig', correct: 'ei', options: ['ei', 'ij'] },
+    { before: 'l', after: 'k', correct: 'eu', options: ['eu', 'u'] },
+    { before: 'kl', after: 'r', correct: 'eu', options: ['eu', 'u'] },
+    { before: '', after: 'ag', correct: 'vl', options: ['vl', 'fl'] },
+    { before: 'n', after: 's', correct: 'eu', options: ['eu', 'u'] },
+    { before: '', after: 'ug', correct: 'br', options: ['br', 'pr'] },
+    { before: 'g', after: 'r', correct: 'eu', options: ['eu', 'u'] },
+    { before: 'h', after: 'd', correct: 'oe', options: ['oe', 'ie'] },
+    { before: 'v', after: 't', correct: 'oe', options: ['oe', 'ie'] },
+    { before: 'st', after: 'p', correct: 'oe', options: ['oe', 'u'] },
+    { before: 'sn', after: 'p', correct: 'oe', options: ['oe', 'u'] },
+    { before: 'm', after: '', correct: 'oe', options: ['oe', 'u'] },
+    { before: 'gr', after: 'n', correct: 'oe', options: ['oe', 'u'] },
+    { before: 'vl', after: 'r', correct: 'oe', options: ['oe', 'u'] },
+    { before: '', after: 'art', correct: 'zw', options: ['zw', 'sw'] },
+    { before: '', after: 'ant', correct: 'pl', options: ['pl', 'bl'] },
+    { before: '', after: 'ap', correct: 'tr', options: ['tr', 'dr'] },
+    { before: '', after: 'uis', correct: 'kr', options: ['kr', 'vr'] },
+    { before: '', after: 'eeuw', correct: 'sn', options: ['sn', 'zn'] },
+    { before: 'm', after: 's', correct: 'ui', options: ['ui', 'eu'] },
   ];
 
   const setupEl = document.getElementById('letters-setup');
@@ -1087,7 +1147,7 @@ if (lettersWordEl) {
   const progressFill = document.getElementById('letters-next-fill');
   let advanceTimeout = null;
 
-  clampInputRange(countInput, 1, 39);
+  clampInputRange(countInput, 1, 99);
 
   let current = null;
   let score = 0;
@@ -1176,7 +1236,7 @@ if (lettersWordEl) {
   }
 
   function startRound() {
-    sumsPerRound = Math.min(39, Math.max(1, Number(countInput.value) || 10));
+    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
     document.getElementById('letters-max').textContent = String(sumsPerRound);
     score = 0;
     wrongTotal = 0;
