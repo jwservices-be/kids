@@ -149,6 +149,9 @@ if (starsCanvas) {
   const restartBtn = document.getElementById('stars-restart');
 
   const GAME_TIME = 30;
+  const LEVEL_MULTIPLIERS = { makkelijk: 1 / 1.5, gewoon: 1, moeilijk: 1.5 };
+  const SPAWN_INTERVAL_BASE = 700;
+  let levelMultiplier = LEVEL_MULTIPLIERS.gewoon;
   let width, height;
   let basketX = 0;
   const basketWidth = 70;
@@ -160,6 +163,16 @@ if (starsCanvas) {
   let rafId = null;
   let timerId = null;
   let lastSpawn = 0;
+
+  const levelButtons = document.querySelectorAll('.stars-level');
+  levelButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (running) return;
+      levelButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      levelMultiplier = LEVEL_MULTIPLIERS[btn.dataset.level];
+    });
+  });
 
   function resizeCanvas() {
     const rect = starsCanvas.getBoundingClientRect();
@@ -176,7 +189,7 @@ if (starsCanvas) {
     stars.push({
       x: Math.random() * (width - 20) + 10,
       y: -20,
-      speed: 1.5 + Math.random() * 2 + Math.min(6, score * 0.05),
+      speed: (1.5 + Math.random() * 2 + Math.min(6, score * 0.05)) * levelMultiplier,
       size: 18 + Math.random() * 10,
     });
   }
@@ -222,7 +235,7 @@ if (starsCanvas) {
     if (!running) return;
     ctx.clearRect(0, 0, width, height);
 
-    if (timestamp - lastSpawn > 700) {
+    if (timestamp - lastSpawn > SPAWN_INTERVAL_BASE / levelMultiplier) {
       spawnStar();
       lastSpawn = timestamp;
     }

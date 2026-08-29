@@ -219,6 +219,23 @@ img { max-width: 100%; }
 }
 
 /* ---------- Memory game ---------- */
+.stars-levels {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.stars-level {
+  background: var(--card-bg);
+  color: var(--dark);
+}
+
+.stars-level.active {
+  background: var(--yellow);
+}
+
 .memory-stats, .stars-stats {
   display: flex;
   align-items: center;
