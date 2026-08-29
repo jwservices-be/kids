@@ -99,17 +99,23 @@
       <button class="btn btn-small reken-mode" data-mode="aftrekken">➖ Aftrekken</button>
     </div>
     <div class="reken-stats">
+      <span>Som <strong id="reken-count">1</strong> van <strong id="reken-max">10</strong></span>
       <span>Score: <strong id="reken-score">0</strong></span>
-      <span>Goed: <strong id="reken-correct">0</strong> / <strong id="reken-total">0</strong></span>
     </div>
     <div class="reken-card">
-      <div id="reken-problem" class="reken-problem"></div>
-      <form id="reken-form" class="reken-form">
-        <input type="number" inputmode="numeric" id="reken-answer" class="reken-input" placeholder="?" autocomplete="off">
-        <button type="submit" class="btn btn-big">✅ Check</button>
-      </form>
-      <p id="reken-message" class="guess-message"></p>
-      <button id="reken-next" class="btn btn-small" hidden>➡️ Volgende som</button>
+      <div id="reken-active">
+        <div id="reken-problem" class="reken-problem"></div>
+        <form id="reken-form" class="reken-form">
+          <input type="number" inputmode="numeric" id="reken-answer" class="reken-input" placeholder="?" autocomplete="off">
+          <button type="submit" class="btn btn-big">✅ Check</button>
+        </form>
+        <p id="reken-message" class="guess-message"></p>
+        <button id="reken-next" class="btn btn-small" hidden>➡️ Volgende som</button>
+      </div>
+      <div id="reken-done" class="reken-done" hidden>
+        <p class="reken-done-message">🎉 Goed gedaan! Je had <strong id="reken-final-score"></strong> van de 10 sommen goed.</p>
+        <button id="reken-restart" class="btn btn-big">🔄 Opnieuw</button>
+      </div>
     </div>
   </section>
 

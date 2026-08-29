@@ -411,10 +411,14 @@ if (guessEmojiEl) {
 const rekenProblemEl = document.getElementById('reken-problem');
 
 if (rekenProblemEl) {
+  const SUMS_PER_ROUND = 10;
   const modeButtons = document.querySelectorAll('.reken-mode');
   const scoreEl = document.getElementById('reken-score');
-  const correctEl = document.getElementById('reken-correct');
-  const totalEl = document.getElementById('reken-total');
+  const countEl = document.getElementById('reken-count');
+  const activeEl = document.getElementById('reken-active');
+  const doneEl = document.getElementById('reken-done');
+  const finalScoreEl = document.getElementById('reken-final-score');
+  const restartBtn = document.getElementById('reken-restart');
   const formEl = document.getElementById('reken-form');
   const answerEl = document.getElementById('reken-answer');
   const messageEl = document.getElementById('reken-message');
@@ -424,14 +428,25 @@ if (rekenProblemEl) {
   let answer = null;
   let score = 0;
   let correctCount = 0;
-  let totalCount = 0;
+  let sumIndex = 0;
   let answered = false;
+
+  document.getElementById('reken-max').textContent = String(SUMS_PER_ROUND);
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   function newProblem() {
+    if (sumIndex >= SUMS_PER_ROUND) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      finalScoreEl.textContent = String(correctCount);
+      return;
+    }
+
+    sumIndex++;
+    countEl.textContent = String(sumIndex);
     answered = false;
     answerEl.disabled = false;
     answerEl.value = '';
@@ -445,9 +460,10 @@ if (rekenProblemEl) {
       const right = total - left;
       const hideLeft = Math.random() < 0.5;
       answer = hideLeft ? left : right;
-      rekenProblemEl.textContent = hideLeft
-        ? `      ${total}\n   ?      ${right}`
-        : `      ${total}\n   ${left}      ?`;
+      rekenProblemEl.innerHTML = `<div class="split-tree">
+        <div class="split-top">${total}</div>
+        <div class="split-children"><span>${hideLeft ? '?' : left}</span><span>${hideLeft ? right : '?'}</span></div>
+      </div>`;
     } else if (mode === 'optellen') {
       const a = randInt(2, 19);
       const b = randInt(1, 20 - a);
@@ -468,14 +484,11 @@ if (rekenProblemEl) {
     if (answerEl.value === '' || Number.isNaN(given)) return;
     answered = true;
     answerEl.disabled = true;
-    totalCount++;
-    totalEl.textContent = String(totalCount);
 
     if (given === answer) {
       score += 10;
       correctCount++;
       scoreEl.textContent = String(score);
-      correctEl.textContent = String(correctCount);
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
     } else {
@@ -485,19 +498,30 @@ if (rekenProblemEl) {
     nextBtn.hidden = false;
   }
 
+  function startRound() {
+    score = 0;
+    correctCount = 0;
+    sumIndex = 0;
+    scoreEl.textContent = '0';
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    newProblem();
+  }
+
   modeButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       modeButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       mode = btn.dataset.mode;
-      newProblem();
+      startRound();
     });
   });
 
   formEl.addEventListener('submit', checkAnswer);
   nextBtn.addEventListener('click', newProblem);
+  restartBtn.addEventListener('click', startRound);
 
-  newProblem();
+  startRound();
 }
 
 // ================================================================
