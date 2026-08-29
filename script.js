@@ -550,7 +550,7 @@ if (rekenProblemEl) {
     if (given === answer) {
       answered = true;
       answerEl.disabled = true;
-      score += 10;
+      score += 1;
       correctCount++;
       scoreEl.textContent = String(score);
       messageEl.textContent = '🎉 Helemaal goed!';
@@ -670,7 +670,7 @@ if (lettersWordEl) {
       answered = true;
       optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
       btn.classList.add('correct');
-      score += 10;
+      score += 1;
       scoreEl.textContent = String(score);
       messageEl.textContent = '🎉 Juist!';
       messageEl.style.color = 'var(--green)';
