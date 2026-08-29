@@ -467,6 +467,29 @@ img { max-width: 100%; }
 .letters-options button.wrong { background: var(--pink); color: #fff; }
 .letters-options button:disabled { opacity: 0.5; }
 
+/* ---------- Auto-advance progress bar ---------- */
+.auto-advance-bar {
+  width: 100%;
+  max-width: 260px;
+  height: 10px;
+  margin: 0.8rem auto 0;
+  border-radius: 999px;
+  background: #eee;
+  overflow: hidden;
+}
+
+.auto-advance-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--green);
+}
+
+.auto-advance-fill.filling {
+  width: 100%;
+  transition: width 2s linear;
+}
+
 /* ---------- Word guess ---------- */
 .guess-card {
   background: var(--card-bg);
