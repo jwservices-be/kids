@@ -321,6 +321,60 @@ img { max-width: 100%; }
   filter: none;
 }
 
+/* ---------- Shape / number options ---------- */
+.shape-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.shape-options button {
+  border: none;
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  padding: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  min-height: 90px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  font-family: inherit;
+  color: var(--dark);
+}
+
+.shape-options button:active { transform: scale(0.94); }
+.shape-options button.correct { background: var(--green); }
+.shape-options button.wrong { background: var(--pink); color: #fff; }
+.shape-options button:disabled { opacity: 0.5; }
+
+.shape-icon {
+  display: inline-block;
+  background: var(--blue);
+  vertical-align: middle;
+}
+
+.shape-icon.circle { width: 60px; height: 60px; border-radius: 50%; }
+.shape-icon.square { width: 60px; height: 60px; border-radius: 6px; }
+.shape-icon.rectangle { width: 80px; height: 46px; border-radius: 6px; }
+.shape-icon.oval { width: 80px; height: 46px; border-radius: 50%; }
+.shape-icon.hexagon {
+  width: 64px; height: 60px;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+.shape-icon.triangle {
+  width: 0; height: 0;
+  background: none;
+  border-left: 32px solid transparent;
+  border-right: 32px solid transparent;
+  border-bottom: 58px solid var(--blue);
+}
+
 /* ---------- Spot the difference ---------- */
 .diff-wrap {
   display: flex;

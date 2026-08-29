@@ -664,6 +664,327 @@ if (silhouettesEl) {
 }
 
 // ================================================================
+// VORMEN EN FIGUREN
+// ================================================================
+const vormenQuestionEl = document.getElementById('vormen-question');
+
+if (vormenQuestionEl) {
+  const SHAPES = [
+    { name: 'cirkel', css: 'circle' },
+    { name: 'driehoek', css: 'triangle' },
+    { name: 'vierkant', css: 'square' },
+    { name: 'rechthoek', css: 'rectangle' },
+    { name: 'zeshoek', css: 'hexagon' },
+    { name: 'ovaal', css: 'oval' },
+  ];
+
+  const POOL = [];
+  SHAPES.forEach((s, i) => {
+    POOL.push({ shapeIndex: i, type: 'toShape' });
+    POOL.push({ shapeIndex: i, type: 'toName' });
+  });
+  const picker = makePicker(POOL);
+
+  const setupEl = document.getElementById('vormen-setup');
+  const playEl = document.getElementById('vormen-play');
+  const countInput = document.getElementById('vormen-count-input');
+  const startSetupBtn = document.getElementById('vormen-start');
+  const countEl = document.getElementById('vormen-count');
+  const scoreEl = document.getElementById('vormen-score');
+  const wrongStatEl = document.getElementById('vormen-wrong');
+  const activeEl = document.getElementById('vormen-active');
+  const doneEl = document.getElementById('vormen-done');
+  const finalScoreEl = document.getElementById('vormen-final-score');
+  const finalMaxEl = document.getElementById('vormen-final-max');
+  const restartRoundBtn = document.getElementById('vormen-restart');
+  const optionsEl = document.getElementById('vormen-options');
+  const messageEl = document.getElementById('vormen-message');
+  const nextBtn = document.getElementById('vormen-next');
+  const progressFill = document.getElementById('vormen-next-fill');
+  let advanceTimeout = null;
+
+  clampInputRange(countInput, 1, 12);
+
+  let current = null;
+  let score = 0;
+  let wrongTotal = 0;
+  let correctCount = 0;
+  let sumIndex = 0;
+  let sumsPerRound = 10;
+  let answered = false;
+  let hadError = false;
+
+  function pickDistractorIndices(exclude) {
+    const indices = SHAPES.map((_, i) => i).filter((i) => i !== exclude);
+    return shuffleArray(indices).slice(0, 2);
+  }
+
+  function shapeIconHtml(css) {
+    return `<span class="shape-icon ${css}"></span>`;
+  }
+
+  function renderQuestion() {
+    const shape = SHAPES[current.shapeIndex];
+    const others = pickDistractorIndices(current.shapeIndex);
+    const optionIndices = shuffleArray([current.shapeIndex, ...others]);
+
+    optionsEl.innerHTML = '';
+    if (current.type === 'toShape') {
+      vormenQuestionEl.innerHTML = `Welke vorm is een <strong>${shape.name}</strong>?`;
+      optionIndices.forEach((idx) => {
+        const btn = document.createElement('button');
+        btn.innerHTML = shapeIconHtml(SHAPES[idx].css);
+        btn.addEventListener('click', () => handleChoice(idx === current.shapeIndex, btn));
+        optionsEl.appendChild(btn);
+      });
+    } else {
+      vormenQuestionEl.innerHTML = `${shapeIconHtml(shape.css)}<br>Wat is de naam van deze vorm?`;
+      optionIndices.forEach((idx) => {
+        const btn = document.createElement('button');
+        btn.textContent = SHAPES[idx].name;
+        btn.addEventListener('click', () => handleChoice(idx === current.shapeIndex, btn));
+        optionsEl.appendChild(btn);
+      });
+    }
+  }
+
+  function handleChoice(isCorrect, btn) {
+    if (answered) return;
+    if (isCorrect) {
+      answered = true;
+      optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
+      btn.classList.add('correct');
+      if (!hadError) {
+        score += 1;
+        correctCount++;
+        scoreEl.textContent = String(score);
+      }
+      messageEl.textContent = '🎉 Juist!';
+      messageEl.style.color = 'var(--green)';
+      nextBtn.hidden = false;
+      startAutoAdvanceBar(progressFill);
+      advanceTimeout = setTimeout(newQuestion, 2000);
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+      hadError = true;
+      wrongTotal++;
+      wrongStatEl.textContent = String(wrongTotal);
+      messageEl.textContent = 'Niet juist, probeer nog eens';
+      messageEl.style.color = 'var(--pink)';
+    }
+  }
+
+  function newQuestion() {
+    if (sumIndex >= sumsPerRound) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      finalScoreEl.textContent = String(correctCount);
+      finalMaxEl.textContent = String(sumsPerRound);
+      setDoneMessage(correctCount / sumsPerRound, 'vormen-done-emoji', 'vormen-done-title');
+      return;
+    }
+
+    sumIndex++;
+    countEl.textContent = String(sumIndex);
+    current = picker.next();
+    answered = false;
+    hadError = false;
+    messageEl.textContent = '';
+    nextBtn.hidden = true;
+    if (advanceTimeout) clearTimeout(advanceTimeout);
+    resetAutoAdvanceBar(progressFill);
+    renderQuestion();
+  }
+
+  function startRound() {
+    sumsPerRound = Math.min(12, Math.max(1, Number(countInput.value) || 10));
+    document.getElementById('vormen-max').textContent = String(sumsPerRound);
+    score = 0;
+    wrongTotal = 0;
+    correctCount = 0;
+    sumIndex = 0;
+    scoreEl.textContent = '0';
+    wrongStatEl.textContent = '0';
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    picker.reset();
+    newQuestion();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startSetupBtn.addEventListener('click', startRound);
+  nextBtn.addEventListener('click', newQuestion);
+  restartRoundBtn.addEventListener('click', backToSetup);
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'vormen' && !playEl.hidden) backToSetup();
+  });
+}
+
+// ================================================================
+// GETALBEGRIP
+// ================================================================
+const getallenProblemEl = document.getElementById('getallen-problem');
+
+if (getallenProblemEl) {
+  const setupEl = document.getElementById('getallen-setup');
+  const playEl = document.getElementById('getallen-play');
+  const maxInput = document.getElementById('getallen-max-input');
+  const countInput = document.getElementById('getallen-count-input');
+  const startSetupBtn = document.getElementById('getallen-start');
+  const countEl = document.getElementById('getallen-count');
+  const scoreEl = document.getElementById('getallen-score');
+  const wrongStatEl = document.getElementById('getallen-wrong');
+  const activeEl = document.getElementById('getallen-active');
+  const doneEl = document.getElementById('getallen-done');
+  const finalScoreEl = document.getElementById('getallen-final-score');
+  const finalMaxEl = document.getElementById('getallen-final-max');
+  const restartRoundBtn = document.getElementById('getallen-restart');
+  const optionsEl = document.getElementById('getallen-options');
+  const messageEl = document.getElementById('getallen-message');
+  const nextBtn = document.getElementById('getallen-next');
+  const progressFill = document.getElementById('getallen-next-fill');
+  let advanceTimeout = null;
+
+  clampInputRange(maxInput, 10, 99);
+  clampInputRange(countInput, 1, 99);
+
+  let maxNumber = 20;
+  let answer = null;
+  let score = 0;
+  let wrongTotal = 0;
+  let correctCount = 0;
+  let sumIndex = 0;
+  let sumsPerRound = 10;
+  let answered = false;
+  let hadError = false;
+  let usedProblems = new Set();
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function newProblem() {
+    if (sumIndex >= sumsPerRound) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      finalScoreEl.textContent = String(correctCount);
+      finalMaxEl.textContent = String(sumsPerRound);
+      setDoneMessage(correctCount / sumsPerRound, 'getallen-done-emoji', 'getallen-done-title');
+      return;
+    }
+
+    sumIndex++;
+    countEl.textContent = String(sumIndex);
+    answered = false;
+    hadError = false;
+    messageEl.textContent = '';
+    nextBtn.hidden = true;
+    if (advanceTimeout) clearTimeout(advanceTimeout);
+    resetAutoAdvanceBar(progressFill);
+
+    let signature;
+    let attempts = 0;
+    let start, step, hidePos, sequence;
+    do {
+      attempts++;
+      step = Math.random() < 0.5 ? 1 : -1;
+      start = step === 1 ? randInt(1, maxNumber - 2) : randInt(3, maxNumber);
+      sequence = [start, start + step, start + step * 2];
+      hidePos = randInt(0, 2);
+      signature = `${start}:${step}:${hidePos}`;
+    } while (usedProblems.has(signature) && attempts < 30);
+    usedProblems.add(signature);
+
+    answer = sequence[hidePos];
+    const display = sequence.map((n, i) => (i === hidePos ? '?' : n));
+    getallenProblemEl.textContent = display.join(', ');
+
+    const wrongOptions = new Set();
+    while (wrongOptions.size < 2) {
+      const offset = randInt(1, 3) * (Math.random() < 0.5 ? 1 : -1);
+      const candidate = answer + offset;
+      if (candidate !== answer && candidate >= 0 && !sequence.includes(candidate) && !wrongOptions.has(candidate)) {
+        wrongOptions.add(candidate);
+      }
+    }
+    const options = shuffleArray([answer, ...wrongOptions]);
+    optionsEl.innerHTML = '';
+    options.forEach((num) => {
+      const btn = document.createElement('button');
+      btn.textContent = String(num);
+      btn.addEventListener('click', () => handleChoice(num, btn));
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  function handleChoice(num, btn) {
+    if (answered) return;
+    if (num === answer) {
+      answered = true;
+      optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
+      btn.classList.add('correct');
+      if (!hadError) {
+        score += 1;
+        correctCount++;
+        scoreEl.textContent = String(score);
+      }
+      messageEl.textContent = '🎉 Helemaal goed!';
+      messageEl.style.color = 'var(--green)';
+      nextBtn.hidden = false;
+      startAutoAdvanceBar(progressFill);
+      advanceTimeout = setTimeout(newProblem, 2000);
+    } else {
+      btn.classList.add('wrong');
+      btn.disabled = true;
+      hadError = true;
+      wrongTotal++;
+      wrongStatEl.textContent = String(wrongTotal);
+      messageEl.textContent = `${num} is niet juist, probeer nog eens`;
+      messageEl.style.color = 'var(--pink)';
+    }
+  }
+
+  function startRound() {
+    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    maxNumber = Math.min(99, Math.max(10, Number(maxInput.value) || 20));
+    document.getElementById('getallen-max').textContent = String(sumsPerRound);
+    score = 0;
+    wrongTotal = 0;
+    correctCount = 0;
+    sumIndex = 0;
+    scoreEl.textContent = '0';
+    wrongStatEl.textContent = '0';
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    usedProblems = new Set();
+    newProblem();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startSetupBtn.addEventListener('click', startRound);
+  nextBtn.addEventListener('click', newProblem);
+  restartRoundBtn.addEventListener('click', backToSetup);
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'getallen' && !playEl.hidden) backToSetup();
+  });
+}
+
+// ================================================================
 // CATCH THE STARS GAME
 // ================================================================
 const starsCanvas = document.getElementById('stars-canvas');

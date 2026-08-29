@@ -6,7 +6,7 @@
 <title>Waerlop spelen — Leuke spelletjes voor kids</title>
 <meta name="description" content="Een speelplein vol leuke spelletjes: geheugenspel, sterren vangen en een woordraadspel. Speel op je telefoon, tablet of computer!">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎈</text></svg>">
-<link rel="stylesheet" href="style.css?v=20260829u">
+<link rel="stylesheet" href="style.css?v=20260829v">
 </head>
 <body>
 
@@ -52,6 +52,14 @@
     <a href="#schaduw" class="game-card" data-route="schaduw" style="--card-color:#6C5CE7">
       <span class="card-emoji">🌑</span>
       <span class="card-title">Schaduwspel</span>
+    </a>
+    <a href="#vormen" class="game-card" data-route="vormen" style="--card-color:#E17055">
+      <span class="card-emoji">🔺</span>
+      <span class="card-title">Vormen en figuren</span>
+    </a>
+    <a href="#getallen" class="game-card" data-route="getallen" style="--card-color:#0984E3">
+      <span class="card-emoji">🔢</span>
+      <span class="card-title">Getalbegrip</span>
     </a>
     <a href="#sterren" class="game-card" data-route="sterren" style="--card-color:#4D96FF">
       <span class="card-emoji">⭐</span>
@@ -307,6 +315,92 @@
     <p id="shadow-win" class="win-message" hidden>🎉 Gewonnen! Goed gedaan!</p>
   </section>
 
+  <!-- VORMEN EN FIGUREN -->
+  <section id="vormen" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
+    <h2>🔺 Vormen en figuren</h2>
+    <p class="game-intro">Herken de vormen! Kies hoeveel oefeningen je wilt maken.</p>
+
+    <div id="vormen-setup" class="reken-setup">
+      <div class="reken-count-picker">
+        <label for="vormen-count-input">Aantal oefeningen:</label>
+        <input type="number" id="vormen-count-input" min="1" max="12" value="10">
+      </div>
+      <button id="vormen-start" class="btn btn-big">▶️ Start</button>
+    </div>
+
+    <div id="vormen-play" hidden>
+      <div class="letters-stats">
+        <span>Vraag <strong id="vormen-count">1</strong> van <strong id="vormen-max">10</strong></span>
+        <span>Score: <strong id="vormen-score">0</strong></span>
+        <span>Fout: <strong id="vormen-wrong">0</strong></span>
+      </div>
+      <div class="letters-card">
+        <div id="vormen-active">
+          <div id="vormen-question" class="reken-problem" style="font-size:1.4rem;"></div>
+          <div id="vormen-options" class="shape-options"></div>
+          <p id="vormen-message" class="guess-message"></p>
+          <button id="vormen-next" class="btn btn-small btn-progress" hidden>
+            <span id="vormen-next-fill" class="btn-progress-fill"></span>
+            <span class="btn-progress-label">➡️ Volgende ➡️</span>
+          </button>
+        </div>
+        <div id="vormen-done" class="reken-done" hidden>
+          <div id="vormen-done-emoji" class="reken-done-emoji">🏆</div>
+          <p id="vormen-done-title" class="reken-done-title">Proficiat!</p>
+          <p class="reken-done-score"><strong id="vormen-final-score"></strong> / <strong id="vormen-final-max"></strong></p>
+          <p class="reken-done-sub">vragen goed!</p>
+          <button id="vormen-restart" class="btn btn-big">🔄 Nieuwe ronde</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GETALBEGRIP -->
+  <section id="getallen" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
+    <h2>🔢 Getalbegrip</h2>
+    <p class="game-intro">Maak de reeks getallen af! Kies tot welk getal en hoeveel oefeningen.</p>
+
+    <div id="getallen-setup" class="reken-setup">
+      <div class="reken-count-picker">
+        <label for="getallen-max-input">Tot welk getal:</label>
+        <input type="number" id="getallen-max-input" min="10" max="99" value="20">
+      </div>
+      <div class="reken-count-picker">
+        <label for="getallen-count-input">Aantal oefeningen:</label>
+        <input type="number" id="getallen-count-input" min="1" max="99" value="10">
+      </div>
+      <button id="getallen-start" class="btn btn-big">▶️ Start</button>
+    </div>
+
+    <div id="getallen-play" hidden>
+      <div class="reken-stats">
+        <span>Reeks <strong id="getallen-count">1</strong> van <strong id="getallen-max">10</strong></span>
+        <span>Score: <strong id="getallen-score">0</strong></span>
+        <span>Fout: <strong id="getallen-wrong">0</strong></span>
+      </div>
+      <div class="reken-card">
+        <div id="getallen-active">
+          <div id="getallen-problem" class="reken-problem"></div>
+          <div id="getallen-options" class="shape-options"></div>
+          <p id="getallen-message" class="guess-message"></p>
+          <button id="getallen-next" class="btn btn-small btn-progress" hidden>
+            <span id="getallen-next-fill" class="btn-progress-fill"></span>
+            <span class="btn-progress-label">➡️ Volgende ➡️</span>
+          </button>
+        </div>
+        <div id="getallen-done" class="reken-done" hidden>
+          <div id="getallen-done-emoji" class="reken-done-emoji">🏆</div>
+          <p id="getallen-done-title" class="reken-done-title">Proficiat!</p>
+          <p class="reken-done-score"><strong id="getallen-final-score"></strong> / <strong id="getallen-final-max"></strong></p>
+          <p class="reken-done-sub">reeksen goed!</p>
+          <button id="getallen-restart" class="btn btn-big">🔄 Nieuwe ronde</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CATCH THE STARS GAME -->
   <section id="sterren" class="game-section game-page">
     <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
@@ -337,6 +431,6 @@
   <p>Gemaakt met ❤️ voor kleine avonturiers &mdash; <span id="year"></span></p>
 </footer>
 
-<script src="script.js?v=20260829u"></script>
+<script src="script.js?v=20260829v"></script>
 </body>
 </html>
