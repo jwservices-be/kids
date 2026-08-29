@@ -415,6 +415,11 @@ if (rekenProblemEl) {
   const playEl = document.getElementById('reken-play');
   const modeButtons = document.querySelectorAll('.reken-mode');
   const countInput = document.getElementById('reken-count-input');
+  countInput.addEventListener('input', () => {
+    const value = Number(countInput.value);
+    if (countInput.value !== '' && (Number.isNaN(value) || value < 1)) countInput.value = '1';
+    if (value > 99) countInput.value = '99';
+  });
   const startBtn = document.getElementById('reken-start');
   const scoreEl = document.getElementById('reken-score');
   const countEl = document.getElementById('reken-count');
@@ -506,7 +511,7 @@ if (rekenProblemEl) {
   }
 
   function startRound() {
-    sumsPerRound = Math.min(50, Math.max(1, Number(countInput.value) || 10));
+    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
     document.getElementById('reken-max').textContent = String(sumsPerRound);
     score = 0;
     correctCount = 0;
