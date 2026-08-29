@@ -65,16 +65,41 @@
   <section id="raad" class="game-section game-page">
     <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>🔤 Woordraadsel</h2>
-    <p class="game-intro">Raad het dier aan de hand van de emoji-hint!</p>
-    <div class="guess-card">
-      <div id="guess-emoji" class="guess-emoji">🐶</div>
-      <div id="guess-word" class="guess-word"></div>
-      <div id="guess-letters" class="guess-letters"></div>
-      <p id="guess-message" class="guess-message"></p>
-      <button id="guess-next" class="btn btn-small btn-progress" hidden>
-        <span id="guess-next-fill" class="btn-progress-fill"></span>
-        <span class="btn-progress-label">➡️ Volgende ➡️</span>
-      </button>
+    <p class="game-intro">Raad het dier aan de hand van de emoji-hint! Kies hoeveel dieren je wilt raden.</p>
+
+    <div id="guess-setup" class="reken-setup">
+      <div class="reken-count-picker">
+        <label for="guess-count-input">Aantal oefeningen:</label>
+        <input type="number" id="guess-count-input" min="1" max="99" value="10">
+      </div>
+      <button id="guess-start" class="btn btn-big">▶️ Start</button>
+    </div>
+
+    <div id="guess-play" hidden>
+      <div class="letters-stats">
+        <span>Dier <strong id="guess-count">1</strong> van <strong id="guess-max">10</strong></span>
+        <span>Score: <strong id="guess-score">0</strong></span>
+        <span>Fout: <strong id="guess-wrong">0</strong></span>
+      </div>
+      <div class="guess-card">
+        <div id="guess-active">
+          <div id="guess-emoji" class="guess-emoji">🐶</div>
+          <div id="guess-word" class="guess-word"></div>
+          <div id="guess-letters" class="guess-letters"></div>
+          <p id="guess-message" class="guess-message"></p>
+          <button id="guess-next" class="btn btn-small btn-progress" hidden>
+            <span id="guess-next-fill" class="btn-progress-fill"></span>
+            <span class="btn-progress-label">➡️ Volgende ➡️</span>
+          </button>
+        </div>
+        <div id="guess-done" class="reken-done" hidden>
+          <div id="guess-done-emoji" class="reken-done-emoji">🏆</div>
+          <p id="guess-done-title" class="reken-done-title">Proficiat!</p>
+          <p class="reken-done-score"><strong id="guess-final-score"></strong> / <strong id="guess-final-max"></strong></p>
+          <p class="reken-done-sub">dieren goed geraden!</p>
+          <button id="guess-restart" class="btn btn-big">🔄 Nieuwe ronde</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -106,6 +131,7 @@
       <div class="reken-stats">
         <span>Som <strong id="reken-count">1</strong> van <strong id="reken-max">10</strong></span>
         <span>Score: <strong id="reken-score">0</strong></span>
+        <span>Fout: <strong id="reken-wrong">0</strong></span>
       </div>
       <div class="reken-card">
         <div id="reken-active">
@@ -138,6 +164,7 @@
     <p class="game-intro">Welke letters horen in het woord? Kies de juiste!</p>
     <div class="letters-stats">
       <span>Score: <strong id="letters-score">0</strong></span>
+      <span>Fout: <strong id="letters-wrong">0</strong></span>
     </div>
     <div class="letters-card">
       <div id="letters-word" class="letters-word"></div>

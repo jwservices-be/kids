@@ -9,6 +9,33 @@ function resetAutoAdvanceBar(fillEl) {
   fillEl.classList.remove('filling');
 }
 
+// ---------- Shared setup-screen helpers ----------
+function clampInputRange(input, min, max) {
+  input.addEventListener('input', () => {
+    const value = Number(input.value);
+    if (input.value !== '' && (Number.isNaN(value) || value < min)) input.value = String(min);
+    if (value > max) input.value = String(max);
+  });
+}
+
+function setDoneMessage(ratio, emojiId, titleId) {
+  const emojiEl = document.getElementById(emojiId);
+  const titleEl = document.getElementById(titleId);
+  if (ratio === 1) {
+    emojiEl.textContent = '🏆';
+    titleEl.textContent = 'Proficiat! Perfecte score!';
+  } else if (ratio >= 0.7) {
+    emojiEl.textContent = '🎉';
+    titleEl.textContent = 'Proficiat! Goed gedaan!';
+  } else if (ratio >= 0.4) {
+    emojiEl.textContent = '👍';
+    titleEl.textContent = 'Goed geprobeerd!';
+  } else {
+    emojiEl.textContent = '💪';
+    titleEl.textContent = 'Blijf oefenen, je kan het!';
+  }
+}
+
 // ---------- Simple page router ----------
 const homeView = document.getElementById('home-view');
 const gamePages = document.querySelectorAll('.game-page');
@@ -356,6 +383,18 @@ if (guessEmojiEl) {
     { emoji: '🐟', word: 'VIS' },
   ];
 
+  const setupEl = document.getElementById('guess-setup');
+  const playEl = document.getElementById('guess-play');
+  const countInput = document.getElementById('guess-count-input');
+  const startSetupBtn = document.getElementById('guess-start');
+  const countEl = document.getElementById('guess-count');
+  const scoreEl = document.getElementById('guess-score');
+  const wrongStatEl = document.getElementById('guess-wrong');
+  const activeEl = document.getElementById('guess-active');
+  const doneEl = document.getElementById('guess-done');
+  const finalScoreEl = document.getElementById('guess-final-score');
+  const finalMaxEl = document.getElementById('guess-final-max');
+  const restartRoundBtn = document.getElementById('guess-restart');
   const wordEl = document.getElementById('guess-word');
   const lettersEl = document.getElementById('guess-letters');
   const messageEl = document.getElementById('guess-message');
@@ -363,10 +402,17 @@ if (guessEmojiEl) {
   const progressFill = document.getElementById('guess-next-fill');
   let advanceTimeout = null;
 
+  clampInputRange(countInput, 1, 99);
+
   const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   let current = null;
   let revealed = [];
-  let wrongCount = 0;
+  let roundHadError = false;
+  let score = 0;
+  let wrongTotal = 0;
+  let correctCount = 0;
+  let sumIndex = 0;
+  let sumsPerRound = 10;
 
   function pickAnimal() {
     let next;
@@ -406,6 +452,11 @@ if (guessEmojiEl) {
       });
       renderWord();
       if (revealed.every(Boolean)) {
+        if (!roundHadError) {
+          score++;
+          correctCount++;
+          scoreEl.textContent = String(score);
+        }
         messageEl.textContent = '🎉 Goed geraden!';
         messageEl.style.color = 'var(--green)';
         lettersEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
@@ -415,16 +466,29 @@ if (guessEmojiEl) {
       }
     } else {
       btn.classList.add('wrong');
-      wrongCount++;
+      roundHadError = true;
+      wrongTotal++;
+      wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `"${letter}" zit niet in het woord, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
     }
   }
 
   function newRound() {
+    if (sumIndex >= sumsPerRound) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      finalScoreEl.textContent = String(correctCount);
+      finalMaxEl.textContent = String(sumsPerRound);
+      setDoneMessage(correctCount / sumsPerRound, 'guess-done-emoji', 'guess-done-title');
+      return;
+    }
+
+    sumIndex++;
+    countEl.textContent = String(sumIndex);
     current = pickAnimal();
     revealed = current.word.split('').map(() => false);
-    wrongCount = 0;
+    roundHadError = false;
     guessEmojiEl.textContent = current.emoji;
     messageEl.textContent = '';
     nextBtn.hidden = true;
@@ -434,8 +498,34 @@ if (guessEmojiEl) {
     renderLetters();
   }
 
+  function startRound() {
+    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    document.getElementById('guess-max').textContent = String(sumsPerRound);
+    score = 0;
+    wrongTotal = 0;
+    correctCount = 0;
+    sumIndex = 0;
+    scoreEl.textContent = '0';
+    wrongStatEl.textContent = '0';
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    newRound();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startSetupBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', newRound);
-  newRound();
+  restartRoundBtn.addEventListener('click', backToSetup);
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'raad' && !playEl.hidden) backToSetup();
+  });
 }
 
 // ================================================================
@@ -449,19 +539,12 @@ if (rekenProblemEl) {
   const modeButtons = document.querySelectorAll('.reken-mode');
   const maxInput = document.getElementById('reken-max-input');
   const countInput = document.getElementById('reken-count-input');
-
-  function clampInput(input, min, max, fallback) {
-    input.addEventListener('input', () => {
-      const value = Number(input.value);
-      if (input.value !== '' && (Number.isNaN(value) || value < min)) input.value = String(min);
-      if (value > max) input.value = String(max);
-    });
-  }
-  clampInput(countInput, 1, 99, 10);
-  clampInput(maxInput, 11, 999, 20);
+  clampInputRange(countInput, 1, 99);
+  clampInputRange(maxInput, 11, 999);
   const startBtn = document.getElementById('reken-start');
   const scoreEl = document.getElementById('reken-score');
   const countEl = document.getElementById('reken-count');
+  const wrongStatEl = document.getElementById('reken-wrong');
   const activeEl = document.getElementById('reken-active');
   const doneEl = document.getElementById('reken-done');
   const finalScoreEl = document.getElementById('reken-final-score');
@@ -479,9 +562,11 @@ if (rekenProblemEl) {
   let sumsPerRound = 10;
   let answer = null;
   let score = 0;
+  let wrongTotal = 0;
   let correctCount = 0;
   let sumIndex = 0;
   let answered = false;
+  let hadErrorThisProblem = false;
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -493,28 +578,14 @@ if (rekenProblemEl) {
       doneEl.hidden = false;
       finalScoreEl.textContent = String(correctCount);
       finalMaxEl.textContent = String(sumsPerRound);
-      const ratio = correctCount / sumsPerRound;
-      const doneEmojiEl = document.getElementById('reken-done-emoji');
-      const doneTitleEl = document.getElementById('reken-done-title');
-      if (ratio === 1) {
-        doneEmojiEl.textContent = '🏆';
-        doneTitleEl.textContent = 'Proficiat! Perfecte score!';
-      } else if (ratio >= 0.7) {
-        doneEmojiEl.textContent = '🎉';
-        doneTitleEl.textContent = 'Proficiat! Goed gedaan!';
-      } else if (ratio >= 0.4) {
-        doneEmojiEl.textContent = '👍';
-        doneTitleEl.textContent = 'Goed geprobeerd!';
-      } else {
-        doneEmojiEl.textContent = '💪';
-        doneTitleEl.textContent = 'Blijf oefenen, je kan het!';
-      }
+      setDoneMessage(correctCount / sumsPerRound, 'reken-done-emoji', 'reken-done-title');
       return;
     }
 
     sumIndex++;
     countEl.textContent = String(sumIndex);
     answered = false;
+    hadErrorThisProblem = false;
     answerEl.disabled = false;
     answerEl.value = '';
     messageEl.textContent = '';
@@ -555,15 +626,20 @@ if (rekenProblemEl) {
     if (given === answer) {
       answered = true;
       answerEl.disabled = true;
-      score += 1;
-      correctCount++;
-      scoreEl.textContent = String(score);
+      if (!hadErrorThisProblem) {
+        score += 1;
+        correctCount++;
+        scoreEl.textContent = String(score);
+      }
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
       nextBtn.hidden = false;
       startAutoAdvanceBar(progressFill);
       advanceTimeout = setTimeout(newProblem, 2000);
     } else {
+      hadErrorThisProblem = true;
+      wrongTotal++;
+      wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `${given} is niet juist, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
       answerEl.value = '';
@@ -576,9 +652,11 @@ if (rekenProblemEl) {
     maxNumber = Math.min(999, Math.max(11, Number(maxInput.value) || 20));
     document.getElementById('reken-max').textContent = String(sumsPerRound);
     score = 0;
+    wrongTotal = 0;
     correctCount = 0;
     sumIndex = 0;
     scoreEl.textContent = '0';
+    wrongStatEl.textContent = '0';
     setupEl.hidden = true;
     playEl.hidden = false;
     activeEl.hidden = false;
@@ -620,7 +698,7 @@ if (lettersWordEl) {
     { before: 'b', after: 'r', correct: 'uu', options: ['u', 'uu', 'ui'] },
     { before: 'paa', after: '', correct: 'rd', options: ['rf', 'rd', 'sr'] },
     { before: 'n', after: 't', correct: 'oo', options: ['o', 'oo', 'aa'] },
-    { before: 'b', after: 'k', correct: 'ee', options: ['e', 'ee', 'ei'] },
+    { before: 'b', after: 'k', correct: 'ee', options: ['ie', 'ee', 'ei'] },
     { before: 'h', after: 'l', correct: 'ee', options: ['ee', 'eu', 'uu'] },
     { before: 'ju', after: '', correct: 'f', options: ['v', 'r', 'f'] },
     { before: '', after: 'oen', correct: 'sch', options: ['cht', 'sch', 'ch'] },
@@ -628,13 +706,14 @@ if (lettersWordEl) {
     { before: 'p', after: 'r', correct: 'ee', options: ['e', 'ee'] },
     { before: 'r', after: 'k', correct: 'u', options: ['u', 'uu'] },
     { before: 'd', after: 'r', correct: 'uu', options: ['u', 'uu'] },
-    { before: 'st', after: 'r', correct: 'u', options: ['u', 'uu'] },
-    { before: 'va', after: '', correct: 'rd', options: ['rd', 'ng', 'gk'] },
-    { before: '', after: 'ijpen', correct: 'kl', options: ['kl', 'tl', 'gr'] },
-    { before: 'ba', after: '', correct: 'ns', options: ['ns', 'kn', 'nk'] },
+    { before: 'st', after: 'r', correct: 'uu', options: ['u', 'uu'] },
+    { before: 'va', after: '', correct: 'ng', options: ['rd', 'ng', 'gk'] },
+    { before: '', after: 'ijpen', correct: 'gr', options: ['kl', 'tl', 'gr'] },
+    { before: 'ba', after: '', correct: 'nk', options: ['ns', 'kn', 'nk'] },
   ];
 
   const scoreEl = document.getElementById('letters-score');
+  const wrongStatEl = document.getElementById('letters-wrong');
   const optionsEl = document.getElementById('letters-options');
   const messageEl = document.getElementById('letters-message');
   const nextBtn = document.getElementById('letters-next');
@@ -643,7 +722,9 @@ if (lettersWordEl) {
 
   let current = null;
   let score = 0;
+  let wrongTotal = 0;
   let answered = false;
+  let hadErrorThisWord = false;
 
   function pickWord() {
     let next;
@@ -674,8 +755,10 @@ if (lettersWordEl) {
       answered = true;
       optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
       btn.classList.add('correct');
-      score += 1;
-      scoreEl.textContent = String(score);
+      if (!hadErrorThisWord) {
+        score += 1;
+        scoreEl.textContent = String(score);
+      }
       messageEl.textContent = '🎉 Juist!';
       messageEl.style.color = 'var(--green)';
       renderWord(current.correct);
@@ -685,6 +768,9 @@ if (lettersWordEl) {
     } else {
       btn.classList.add('wrong');
       btn.disabled = true;
+      hadErrorThisWord = true;
+      wrongTotal++;
+      wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `"${option}" is niet juist, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
     }
@@ -693,6 +779,7 @@ if (lettersWordEl) {
   function newWord() {
     current = pickWord();
     answered = false;
+    hadErrorThisWord = false;
     messageEl.textContent = '';
     nextBtn.hidden = true;
     if (advanceTimeout) clearTimeout(advanceTimeout);
