@@ -18,6 +18,28 @@ function clampInputRange(input, min, max) {
   });
 }
 
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function makePicker(list) {
+  let pool = [];
+  return {
+    next() {
+      if (pool.length === 0) pool = shuffleArray(list);
+      return pool.pop();
+    },
+    reset() {
+      pool = [];
+    },
+  };
+}
+
 function setDoneMessage(ratio, emojiId, titleId) {
   const emojiEl = document.getElementById(emojiId);
   const titleEl = document.getElementById(titleId);
@@ -696,12 +718,9 @@ if (guessEmojiEl) {
   let sumIndex = 0;
   let sumsPerRound = 10;
 
+  const animalPicker = makePicker(ANIMALS);
   function pickAnimal() {
-    let next;
-    do {
-      next = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
-    } while (current && next.word === current.word && ANIMALS.length > 1);
-    return next;
+    return animalPicker.next();
   }
 
   function renderWord() {
@@ -793,6 +812,7 @@ if (guessEmojiEl) {
     playEl.hidden = false;
     activeEl.hidden = false;
     doneEl.hidden = true;
+    animalPicker.reset();
     newRound();
   }
 
@@ -849,6 +869,7 @@ if (rekenProblemEl) {
   let sumIndex = 0;
   let answered = false;
   let hadErrorThisProblem = false;
+  let usedProblems = new Set();
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -876,27 +897,36 @@ if (rekenProblemEl) {
     resetAutoAdvanceBar(progressFill);
     answerEl.focus();
 
-    if (mode === 'splitsen') {
-      const total = randInt(Math.ceil(maxNumber / 2), maxNumber);
-      const left = randInt(1, total - 1);
-      const right = total - left;
-      const hideLeft = Math.random() < 0.5;
-      answer = hideLeft ? left : right;
-      rekenProblemEl.innerHTML = `<div class="split-tree">
-        <div class="split-top">${total}</div>
-        <div class="split-children"><span>${hideLeft ? '?' : left}</span><span>${hideLeft ? right : '?'}</span></div>
-      </div>`;
-    } else if (mode === 'optellen') {
-      const a = randInt(2, maxNumber - 1);
-      const b = randInt(1, maxNumber - a);
-      answer = a + b;
-      rekenProblemEl.textContent = `${a} + ${b} = ?`;
-    } else {
-      const a = randInt(2, maxNumber);
-      const b = randInt(1, a);
-      answer = a - b;
-      rekenProblemEl.textContent = `${a} - ${b} = ?`;
-    }
+    let signature;
+    let attempts = 0;
+    do {
+      attempts++;
+      if (mode === 'splitsen') {
+        const total = randInt(Math.ceil(maxNumber / 2), maxNumber);
+        const left = randInt(1, total - 1);
+        const right = total - left;
+        const hideLeft = Math.random() < 0.5;
+        answer = hideLeft ? left : right;
+        signature = `splitsen:${total}:${hideLeft}`;
+        rekenProblemEl.innerHTML = `<div class="split-tree">
+          <div class="split-top">${total}</div>
+          <div class="split-children"><span>${hideLeft ? '?' : left}</span><span>${hideLeft ? right : '?'}</span></div>
+        </div>`;
+      } else if (mode === 'optellen') {
+        const a = randInt(2, maxNumber - 1);
+        const b = randInt(1, maxNumber - a);
+        answer = a + b;
+        signature = `optellen:${a}:${b}`;
+        rekenProblemEl.textContent = `${a} + ${b} = ?`;
+      } else {
+        const a = randInt(2, maxNumber);
+        const b = randInt(1, a);
+        answer = a - b;
+        signature = `aftrekken:${a}:${b}`;
+        rekenProblemEl.textContent = `${a} - ${b} = ?`;
+      }
+    } while (usedProblems.has(signature) && attempts < 30);
+    usedProblems.add(signature);
   }
 
   function checkAnswer(e) {
@@ -943,6 +973,7 @@ if (rekenProblemEl) {
     playEl.hidden = false;
     activeEl.hidden = false;
     doneEl.hidden = true;
+    usedProblems = new Set();
     newProblem();
   }
 
@@ -1047,12 +1078,9 @@ if (lettersWordEl) {
   let answered = false;
   let hadErrorThisWord = false;
 
+  const wordPicker = makePicker(WORDS);
   function pickWord() {
-    let next;
-    do {
-      next = WORDS[Math.floor(Math.random() * WORDS.length)];
-    } while (current && next === current && WORDS.length > 1);
-    return next;
+    return wordPicker.next();
   }
 
   function shuffle(arr) {
@@ -1140,6 +1168,7 @@ if (lettersWordEl) {
     playEl.hidden = false;
     activeEl.hidden = false;
     doneEl.hidden = true;
+    wordPicker.reset();
     newWord();
   }
 
@@ -1165,7 +1194,7 @@ const zinnenSentenceEl = document.getElementById('zinnen-sentence');
 if (zinnenSentenceEl) {
   const SENTENCES = [
     { before: 'De kat ', after: ' een muis.', correct: 'eet', options: ['eet', 'vaart', 'zingt'] },
-    { before: 'Hij speelt met ', after: '.', correct: 'vuur', options: ['vuur', 'wolk', 'brood'] },
+    { before: 'Hij speelt met de ', after: '.', correct: 'bal', options: ['bal', 'wolk', 'brood'] },
     { before: '', after: ' zit in de trein.', correct: 'Roel', options: ['Roel', 'Zout', 'Ziet'] },
     { before: 'Piet gaat naar ', after: '.', correct: 'huis', options: ['huis', 'hooi', 'mooi'] },
     { before: 'Mijn ', after: ' is lief.', correct: 'juf', options: ['juf', 'tafel', 'fiets'] },
@@ -1210,12 +1239,9 @@ if (zinnenSentenceEl) {
   let answered = false;
   let hadErrorThisSentence = false;
 
+  const sentencePicker = makePicker(SENTENCES);
   function pickSentence() {
-    let next;
-    do {
-      next = SENTENCES[Math.floor(Math.random() * SENTENCES.length)];
-    } while (current && next === current && SENTENCES.length > 1);
-    return next;
+    return sentencePicker.next();
   }
 
   function shuffle(arr) {
@@ -1303,6 +1329,7 @@ if (zinnenSentenceEl) {
     playEl.hidden = false;
     activeEl.hidden = false;
     doneEl.hidden = true;
+    sentencePicker.reset();
     newSentence();
   }
 

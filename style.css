@@ -360,7 +360,7 @@ img { max-width: 100%; }
 }
 
 @media (max-width: 640px) {
-  .diff-wrap { gap: 0.4rem; }
+  .diff-wrap { flex-direction: column; gap: 0.8rem; max-width: 340px; }
 }
 
 /* ---------- Reken oefening ---------- */
