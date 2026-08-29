@@ -299,8 +299,9 @@ img { max-width: 100%; }
   transition: transform 0.15s ease, background 0.2s ease;
 }
 
-.shadow-tile.silhouette {
+.shadow-tile.silhouette .shadow-emoji {
   filter: brightness(0);
+  display: inline-block;
 }
 
 .shadow-tile.selected {
@@ -313,9 +314,12 @@ img { max-width: 100%; }
 }
 
 .shadow-tile.matched {
-  filter: none;
   background: var(--green);
   cursor: default;
+}
+
+.shadow-tile.matched .shadow-emoji {
+  filter: none;
 }
 
 /* ---------- Spot the difference ---------- */

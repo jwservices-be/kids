@@ -398,7 +398,7 @@ if (silhouettesEl) {
       const tile = document.createElement('div');
       tile.className = 'shadow-tile silhouette';
       tile.dataset.emoji = emoji;
-      tile.textContent = emoji;
+      tile.innerHTML = `<span class="shadow-emoji">${emoji}</span>`;
       tile.addEventListener('click', () => onSilhouetteClick(tile));
       silhouettesEl.appendChild(tile);
     });
@@ -407,7 +407,7 @@ if (silhouettesEl) {
       const tile = document.createElement('div');
       tile.className = 'shadow-tile';
       tile.dataset.emoji = emoji;
-      tile.textContent = emoji;
+      tile.innerHTML = `<span class="shadow-emoji">${emoji}</span>`;
       tile.addEventListener('click', () => onAnimalClick(tile));
       animalsEl.appendChild(tile);
     });
@@ -822,7 +822,7 @@ if (rekenProblemEl) {
   const maxInput = document.getElementById('reken-max-input');
   const countInput = document.getElementById('reken-count-input');
   clampInputRange(countInput, 1, 99);
-  clampInputRange(maxInput, 11, 999);
+  clampInputRange(maxInput, 1, 99);
   const startBtn = document.getElementById('reken-start');
   const scoreEl = document.getElementById('reken-score');
   const countEl = document.getElementById('reken-count');
@@ -931,7 +931,7 @@ if (rekenProblemEl) {
 
   function startRound() {
     sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
-    maxNumber = Math.min(999, Math.max(11, Number(maxInput.value) || 20));
+    maxNumber = Math.min(99, Math.max(4, Number(maxInput.value) || 20));
     document.getElementById('reken-max').textContent = String(sumsPerRound);
     score = 0;
     wrongTotal = 0;
