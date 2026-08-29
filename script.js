@@ -1,3 +1,33 @@
+// ---------- Simple page router ----------
+const homeView = document.getElementById('home-view');
+const gamePages = document.querySelectorAll('.game-page');
+
+function showRoute(route) {
+  const isHome = !route || route === 'home';
+  if (homeView) homeView.style.display = isHome ? '' : 'none';
+  gamePages.forEach((page) => {
+    page.classList.toggle('active', !isHome && page.id === route);
+  });
+  window.scrollTo({ top: 0 });
+  window.dispatchEvent(new CustomEvent('routechange', { detail: { route } }));
+}
+
+function routeFromHash() {
+  return window.location.hash.replace('#', '') || 'home';
+}
+
+document.querySelectorAll('[data-route]').forEach((el) => {
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    const route = el.dataset.route;
+    window.location.hash = route === 'home' ? '' : route;
+    showRoute(route);
+  });
+});
+
+window.addEventListener('hashchange', () => showRoute(routeFromHash()));
+showRoute(routeFromHash());
+
 // ---------- Mobile nav toggle ----------
 const menuToggle = document.getElementById('menu-toggle');
 const siteNav = document.getElementById('site-nav');
@@ -260,6 +290,10 @@ if (starsCanvas) {
 
   window.addEventListener('resize', () => {
     if (!running) resizeCanvas();
+  });
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route === 'sterren' && !running) resizeCanvas();
   });
 
   resizeCanvas();

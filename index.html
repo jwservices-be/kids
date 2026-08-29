@@ -12,11 +12,11 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <span class="logo">🎈 Waerlop spelen</span>
+    <a href="#" class="logo" data-route="home">🎈 Waerlop spelen</a>
     <nav class="site-nav" id="site-nav">
-      <a href="#geheugen">Geheugenspel</a>
-      <a href="#raad">Woordraadsel</a>
-      <a href="#sterren">Sterren vangen</a>
+      <a href="#geheugen" data-route="geheugen">Geheugenspel</a>
+      <a href="#raad" data-route="raad">Woordraadsel</a>
+      <a href="#sterren" data-route="sterren">Sterren vangen</a>
     </nav>
     <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
       <span></span><span></span><span></span>
@@ -26,32 +26,34 @@
 
 <main>
 
+  <div id="home-view">
   <section class="hero">
     <div class="hero-blob blob-1"></div>
     <div class="hero-blob blob-2"></div>
     <div class="hero-blob blob-3"></div>
     <h1>Welkom bij Waerlop spelen! 🎉</h1>
     <p>Kies een spelletje hieronder en speel zoveel je wilt.<br>Werkt op je computer én op je telefoon!</p>
-    <a href="#games" class="btn btn-big">Begin met spelen ⬇️</a>
   </section>
 
   <section id="games" class="games-nav">
-    <a href="#geheugen" class="game-card" style="--card-color:#FF6B6B">
+    <a href="#geheugen" class="game-card" data-route="geheugen" style="--card-color:#FF6B6B">
       <span class="card-emoji">🧠</span>
       <span class="card-title">Geheugenspel</span>
     </a>
-    <a href="#raad" class="game-card" style="--card-color:#6BCB77">
+    <a href="#raad" class="game-card" data-route="raad" style="--card-color:#6BCB77">
       <span class="card-emoji">🔤</span>
       <span class="card-title">Woordraadsel</span>
     </a>
-    <a href="#sterren" class="game-card" style="--card-color:#4D96FF">
+    <a href="#sterren" class="game-card" data-route="sterren" style="--card-color:#4D96FF">
       <span class="card-emoji">⭐</span>
       <span class="card-title">Sterren vangen</span>
     </a>
   </section>
+  </div>
 
   <!-- MEMORY GAME -->
-  <section id="geheugen" class="game-section">
+  <section id="geheugen" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>🧠 Geheugenspel</h2>
     <p class="game-intro">Vind alle paren! Tik op een kaartje om het om te draaien.</p>
     <div class="memory-stats">
@@ -63,7 +65,8 @@
   </section>
 
   <!-- WORD GUESS GAME -->
-  <section id="raad" class="game-section">
+  <section id="raad" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>🔤 Woordraadsel</h2>
     <p class="game-intro">Raad het dier aan de hand van de emoji-hint!</p>
     <div class="guess-card">
@@ -76,7 +79,8 @@
   </section>
 
   <!-- CATCH THE STARS GAME -->
-  <section id="sterren" class="game-section">
+  <section id="sterren" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>⭐ Sterren vangen</h2>
     <p class="game-intro">Beweeg de mand met je vinger (of muis) en vang zoveel mogelijk sterren!</p>
     <div class="stars-stats">
