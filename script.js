@@ -174,6 +174,288 @@ if (memoryBoard) {
 }
 
 // ================================================================
+// SPOT THE DIFFERENCE GAME
+// ================================================================
+const diffPanelLeft = document.getElementById('diff-panel-left');
+
+if (diffPanelLeft) {
+  const diffPanelRight = document.getElementById('diff-panel-right');
+  const sceneNumEl = document.getElementById('diff-scene-num');
+  const sceneMaxEl = document.getElementById('diff-scene-max');
+  const foundEl = document.getElementById('diff-found');
+  const totalEl = document.getElementById('diff-total');
+  const activeEl = document.getElementById('diff-active');
+  const doneEl = document.getElementById('diff-done');
+  const messageEl = document.getElementById('diff-message');
+  const nextBtn = document.getElementById('diff-next');
+  const progressFill = document.getElementById('diff-next-fill');
+  const restartBtn = document.getElementById('diff-restart');
+  let advanceTimeout = null;
+
+  const SCENES = [
+    {
+      name: 'onderwater',
+      left: [
+        ['🐠', 15, 20, 2.2], ['🐟', 40, 15, 2], ['🐡', 70, 25, 2.4], ['🦈', 85, 50, 3],
+        ['🐙', 20, 60, 2.6], ['⭐', 50, 70, 1.8], ['🪸', 10, 85, 2.2], ['🌊', 60, 10, 1.6],
+        ['🐚', 35, 80, 1.8], ['🦀', 75, 80, 2], ['🫧', 55, 40, 1.4], ['🐬', 90, 15, 2.2],
+      ],
+      right: [
+        ['🐟', 15, 20, 2.2], ['🐟', 40, 15, 2], ['🐡', 70, 25, 2.4],
+        ['🐙', 20, 60, 2.6], ['⭐', 50, 45, 1.8], ['🪸', 10, 85, 2.2], ['🌊', 60, 10, 1.6],
+        ['🐚', 35, 80, 3.2], ['🦀', 75, 80, 2], ['🫧', 55, 40, 1.4], ['🐬', 90, 15, 2.2, true],
+      ],
+      diffs: [
+        { lx: 15, ly: 20, rx: 15, ry: 20, r: 9 },
+        { lx: 85, ly: 50, rx: 85, ry: 50, r: 9 },
+        { lx: 50, ly: 70, rx: 50, ry: 45, r: 9 },
+        { lx: 35, ly: 80, rx: 35, ry: 80, r: 10 },
+        { lx: 90, ly: 15, rx: 90, ry: 15, r: 9 },
+      ],
+    },
+    {
+      name: 'ruimte',
+      left: [
+        ['🚀', 20, 70, 2.6], ['🪐', 70, 20, 2.8], ['⭐', 15, 20, 1.6], ['⭐', 40, 10, 1.4],
+        ['🌟', 85, 15, 1.8], ['👽', 50, 60, 2.4], ['🌙', 30, 40, 2.2], ['☄️', 80, 75, 2],
+        ['🛸', 60, 85, 2.2], ['⭐', 90, 50, 1.4], ['🪨', 10, 55, 1.8], ['⭐', 25, 85, 1.4],
+      ],
+      right: [
+        ['🚀', 20, 70, 2.6, true], ['⭐', 15, 20, 1.6], ['⭐', 40, 10, 1.4],
+        ['🌟', 85, 15, 1.8], ['👽', 55, 35, 2.4], ['🌙', 30, 40, 2.2], ['🔥', 80, 75, 2],
+        ['🛸', 60, 85, 2.2], ['⭐', 90, 50, 1.4], ['🪨', 10, 55, 1.8], ['⭐', 25, 85, 3],
+      ],
+      diffs: [
+        { lx: 20, ly: 70, rx: 20, ry: 70, r: 9 },
+        { lx: 70, ly: 20, rx: 70, ry: 20, r: 9 },
+        { lx: 50, ly: 60, rx: 55, ry: 35, r: 9 },
+        { lx: 80, ly: 75, rx: 80, ry: 75, r: 9 },
+        { lx: 25, ly: 85, rx: 25, ry: 85, r: 10 },
+      ],
+    },
+    {
+      name: 'boerderij',
+      left: [
+        ['🐄', 20, 60, 2.6], ['🐖', 45, 70, 2.2], ['🐓', 70, 55, 2], ['🐑', 15, 30, 2.2],
+        ['🚜', 60, 25, 2.6], ['🌻', 85, 70, 2], ['🌾', 30, 85, 1.8], ['🐴', 80, 35, 2.4],
+        ['🐔', 50, 45, 1.8], ['🍎', 10, 75, 1.6], ['☀️', 90, 10, 2], ['🌳', 5, 15, 2.4],
+      ],
+      right: [
+        ['🐂', 20, 60, 2.6], ['🐖', 45, 70, 2.2], ['🐓', 70, 55, 2], ['🐑', 15, 30, 2.2],
+        ['🌻', 85, 70, 2], ['🌾', 30, 85, 1.8], ['🐴', 75, 60, 2.4],
+        ['🐔', 50, 45, 1.8], ['🍎', 10, 75, 1.6], ['☀️', 90, 10, 3.4], ['🌳', 5, 15, 2.4, true],
+      ],
+      diffs: [
+        { lx: 20, ly: 60, rx: 20, ry: 60, r: 9 },
+        { lx: 60, ly: 25, rx: 60, ry: 25, r: 9 },
+        { lx: 80, ly: 35, rx: 75, ry: 60, r: 9 },
+        { lx: 90, ly: 10, rx: 90, ry: 10, r: 10 },
+        { lx: 5, ly: 15, rx: 5, ry: 15, r: 9 },
+      ],
+    },
+  ];
+
+  let sceneIndex = 0;
+  let foundCount = 0;
+  let found = [];
+
+  function renderPanel(panelEl, items) {
+    panelEl.innerHTML = '';
+    items.forEach(([emoji, x, y, size, flip]) => {
+      const el = document.createElement('div');
+      el.className = 'diff-item';
+      el.style.left = `${x}%`;
+      el.style.top = `${y}%`;
+      el.style.fontSize = `${size}em`;
+      if (flip) el.style.transform = 'translate(-50%, -50%) scaleX(-1)';
+      el.textContent = emoji;
+      panelEl.appendChild(el);
+    });
+  }
+
+  function addMarker(panelEl, x, y) {
+    const marker = document.createElement('div');
+    marker.className = 'diff-marker';
+    marker.style.left = `${x}%`;
+    marker.style.top = `${y}%`;
+    panelEl.appendChild(marker);
+  }
+
+  function handleClick(e, side) {
+    const scene = SCENES[sceneIndex];
+    const panelEl = side === 'left' ? diffPanelLeft : diffPanelRight;
+    const rect = panelEl.getBoundingClientRect();
+    const clickX = ((e.clientX - rect.left) / rect.width) * 100;
+    const clickY = ((e.clientY - rect.top) / rect.height) * 100;
+
+    scene.diffs.forEach((d, i) => {
+      if (found[i]) return;
+      const tx = side === 'left' ? d.lx : d.rx;
+      const ty = side === 'left' ? d.ly : d.ry;
+      const dist = Math.hypot(clickX - tx, clickY - ty);
+      if (dist <= d.r) {
+        found[i] = true;
+        foundCount++;
+        foundEl.textContent = String(foundCount);
+        addMarker(diffPanelLeft, d.lx, d.ly);
+        addMarker(diffPanelRight, d.rx, d.ry);
+        if (foundCount === scene.diffs.length) {
+          messageEl.textContent = '🎉 Prachtig! Je hebt alle verschillen gevonden!';
+          messageEl.style.color = 'var(--green)';
+          nextBtn.hidden = false;
+          startAutoAdvanceBar(progressFill);
+          advanceTimeout = setTimeout(goToNextScene, 2500);
+        }
+      }
+    });
+  }
+
+  diffPanelLeft.addEventListener('click', (e) => handleClick(e, 'left'));
+  diffPanelRight.addEventListener('click', (e) => handleClick(e, 'right'));
+
+  function newScene() {
+    if (sceneIndex >= SCENES.length) {
+      activeEl.hidden = true;
+      doneEl.hidden = false;
+      return;
+    }
+
+    const scene = SCENES[sceneIndex];
+    sceneNumEl.textContent = String(sceneIndex + 1);
+    sceneMaxEl.textContent = String(SCENES.length);
+    totalEl.textContent = String(scene.diffs.length);
+    foundCount = 0;
+    found = [];
+    foundEl.textContent = '0';
+    messageEl.textContent = '';
+    nextBtn.hidden = true;
+    if (advanceTimeout) clearTimeout(advanceTimeout);
+    resetAutoAdvanceBar(progressFill);
+    renderPanel(diffPanelLeft, scene.left);
+    renderPanel(diffPanelRight, scene.right);
+  }
+
+  function goToNextScene() {
+    sceneIndex++;
+    newScene();
+  }
+
+  function restartAll() {
+    sceneIndex = 0;
+    activeEl.hidden = false;
+    doneEl.hidden = true;
+    newScene();
+  }
+
+  nextBtn.addEventListener('click', goToNextScene);
+  restartBtn.addEventListener('click', restartAll);
+
+  newScene();
+}
+
+// ================================================================
+// SHADOW MATCHING GAME
+// ================================================================
+const silhouettesEl = document.getElementById('shadow-silhouettes');
+
+if (silhouettesEl) {
+  const animalsEl = document.getElementById('shadow-animals');
+  const foundEl = document.getElementById('shadow-found');
+  const totalEl = document.getElementById('shadow-total');
+  const movesEl = document.getElementById('shadow-moves');
+  const restartBtn = document.getElementById('shadow-restart');
+  const winEl = document.getElementById('shadow-win');
+
+  const ANIMALS = ['🐶', '🐱', '🐮', '🐑', '🐔', '🦆', '🐸', '🐰'];
+
+  let matchedCount = 0;
+  let moves = 0;
+  let selectedSilhouette = null;
+  let lock = false;
+
+  function shuffle(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function buildBoard() {
+    silhouettesEl.innerHTML = '';
+    animalsEl.innerHTML = '';
+    matchedCount = 0;
+    moves = 0;
+    selectedSilhouette = null;
+    lock = false;
+    foundEl.textContent = '0';
+    totalEl.textContent = String(ANIMALS.length);
+    movesEl.textContent = '0';
+    winEl.hidden = true;
+
+    shuffle(ANIMALS).forEach((emoji) => {
+      const tile = document.createElement('div');
+      tile.className = 'shadow-tile silhouette';
+      tile.dataset.emoji = emoji;
+      tile.textContent = emoji;
+      tile.addEventListener('click', () => onSilhouetteClick(tile));
+      silhouettesEl.appendChild(tile);
+    });
+
+    shuffle(ANIMALS).forEach((emoji) => {
+      const tile = document.createElement('div');
+      tile.className = 'shadow-tile';
+      tile.dataset.emoji = emoji;
+      tile.textContent = emoji;
+      tile.addEventListener('click', () => onAnimalClick(tile));
+      animalsEl.appendChild(tile);
+    });
+  }
+
+  function onSilhouetteClick(tile) {
+    if (lock || tile.classList.contains('matched')) return;
+    if (selectedSilhouette) selectedSilhouette.classList.remove('selected');
+    if (selectedSilhouette === tile) {
+      selectedSilhouette = null;
+      return;
+    }
+    selectedSilhouette = tile;
+    tile.classList.add('selected');
+  }
+
+  function onAnimalClick(tile) {
+    if (lock || tile.classList.contains('matched') || !selectedSilhouette) return;
+    moves++;
+    movesEl.textContent = String(moves);
+
+    if (tile.dataset.emoji === selectedSilhouette.dataset.emoji) {
+      tile.classList.add('matched');
+      selectedSilhouette.classList.add('matched');
+      selectedSilhouette.classList.remove('selected');
+      selectedSilhouette = null;
+      matchedCount++;
+      foundEl.textContent = String(matchedCount);
+      if (matchedCount === ANIMALS.length) {
+        winEl.hidden = false;
+      }
+    } else {
+      lock = true;
+      tile.classList.add('wrong');
+      setTimeout(() => {
+        tile.classList.remove('wrong');
+        if (selectedSilhouette) selectedSilhouette.classList.remove('selected');
+        selectedSilhouette = null;
+        lock = false;
+      }, 600);
+    }
+  }
+
+  restartBtn.addEventListener('click', buildBoard);
+  buildBoard();
+}
+
+// ================================================================
 // CATCH THE STARS GAME
 // ================================================================
 const starsCanvas = document.getElementById('stars-canvas');

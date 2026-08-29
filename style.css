@@ -277,6 +277,88 @@ img { max-width: 100%; }
 
 .canvas-overlay[hidden] { display: none; }
 
+/* ---------- Shadow matching game ---------- */
+.shadow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  max-width: 480px;
+  margin: 0 auto 1rem;
+}
+
+.shadow-tile {
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.shadow-tile.silhouette {
+  filter: brightness(0);
+}
+
+.shadow-tile.selected {
+  outline: 4px solid var(--yellow);
+  transform: scale(1.05);
+}
+
+.shadow-tile.wrong {
+  background: var(--pink);
+}
+
+.shadow-tile.matched {
+  filter: none;
+  background: var(--green);
+  cursor: default;
+}
+
+/* ---------- Spot the difference ---------- */
+.diff-wrap {
+  display: flex;
+  gap: 0.6rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.diff-panel {
+  position: relative;
+  flex: 1;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(180deg, #cfe8ff, #eaf6ff);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.diff-item {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  pointer-events: none;
+}
+
+.diff-marker {
+  position: absolute;
+  width: 16%;
+  height: 16%;
+  border: 3px solid var(--pink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 0 0 0 2px #fff inset;
+}
+
+@media (max-width: 640px) {
+  .diff-wrap { gap: 0.4rem; }
+}
+
 /* ---------- Reken oefening ---------- */
 .reken-modes {
   display: flex;
