@@ -571,6 +571,7 @@ if (silhouettesEl) {
   const ANIMALS = ['🐶', '🐱', '🐮', '🐑', '🐔', '🦆', '🐸', '🐰', '🐴', '🐷', '🦉', '🐢', '🐝', '🦋', '🐻'];
 
   let matchedCount = 0;
+  let roundSize = 0;
   let moves = 0;
   let selectedSilhouette = null;
   let lock = false;
@@ -584,6 +585,8 @@ if (silhouettesEl) {
     return copy;
   }
 
+  const TILES_PER_ROUND = 12;
+
   function buildBoard() {
     silhouettesEl.innerHTML = '';
     animalsEl.innerHTML = '';
@@ -592,11 +595,14 @@ if (silhouettesEl) {
     selectedSilhouette = null;
     lock = false;
     foundEl.textContent = '0';
-    totalEl.textContent = String(ANIMALS.length);
     movesEl.textContent = '0';
     winEl.hidden = true;
 
-    shuffle(ANIMALS).forEach((emoji) => {
+    const roundAnimals = shuffle(ANIMALS).slice(0, TILES_PER_ROUND);
+    roundSize = roundAnimals.length;
+    totalEl.textContent = String(roundSize);
+
+    shuffle(roundAnimals).forEach((emoji) => {
       const tile = document.createElement('div');
       tile.className = 'shadow-tile silhouette';
       tile.dataset.emoji = emoji;
@@ -605,7 +611,7 @@ if (silhouettesEl) {
       silhouettesEl.appendChild(tile);
     });
 
-    shuffle(ANIMALS).forEach((emoji) => {
+    shuffle(roundAnimals).forEach((emoji) => {
       const tile = document.createElement('div');
       tile.className = 'shadow-tile';
       tile.dataset.emoji = emoji;
@@ -638,7 +644,7 @@ if (silhouettesEl) {
       selectedSilhouette = null;
       matchedCount++;
       foundEl.textContent = String(matchedCount);
-      if (matchedCount === ANIMALS.length) {
+      if (matchedCount === roundSize) {
         winEl.hidden = false;
       }
     } else {
@@ -695,7 +701,6 @@ if (starsCanvas) {
   const levelButtons = document.querySelectorAll('.stars-level');
   levelButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      if (running) return;
       levelButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       level = LEVEL_CONFIG[btn.dataset.level];
