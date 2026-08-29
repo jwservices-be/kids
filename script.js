@@ -360,6 +360,8 @@ if (guessEmojiEl) {
   const lettersEl = document.getElementById('guess-letters');
   const messageEl = document.getElementById('guess-message');
   const nextBtn = document.getElementById('guess-next');
+  const progressFill = document.getElementById('guess-next-fill');
+  let advanceTimeout = null;
 
   const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   let current = null;
@@ -407,11 +409,14 @@ if (guessEmojiEl) {
         messageEl.textContent = '🎉 Goed geraden!';
         messageEl.style.color = 'var(--green)';
         lettersEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
+        nextBtn.hidden = false;
+        startAutoAdvanceBar(progressFill);
+        advanceTimeout = setTimeout(newRound, 2000);
       }
     } else {
       btn.classList.add('wrong');
       wrongCount++;
-      messageEl.textContent = 'Probeer nog eens!';
+      messageEl.textContent = `"${letter}" zit niet in het woord, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
     }
   }
@@ -422,6 +427,9 @@ if (guessEmojiEl) {
     wrongCount = 0;
     guessEmojiEl.textContent = current.emoji;
     messageEl.textContent = '';
+    nextBtn.hidden = true;
+    if (advanceTimeout) clearTimeout(advanceTimeout);
+    resetAutoAdvanceBar(progressFill);
     renderWord();
     renderLetters();
   }
