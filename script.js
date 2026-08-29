@@ -495,6 +495,9 @@ if (rekenProblemEl) {
       scoreEl.textContent = String(score);
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
+      if (sumIndex < sumsPerRound) {
+        setTimeout(newProblem, 2000);
+      }
     } else {
       messageEl.textContent = 'Niet juist, probeer nog eens';
       messageEl.style.color = 'var(--pink)';
