@@ -92,29 +92,41 @@
   <section id="rekenen" class="game-section game-page">
     <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>🔢 Rekenoefening</h2>
-    <p class="game-intro">Los de som op tot 20. Kies eerst een soort rekenen!</p>
-    <div class="reken-modes">
-      <button class="btn btn-small reken-mode active" data-mode="splitsen">🌳 Splitsen</button>
-      <button class="btn btn-small reken-mode" data-mode="optellen">➕ Optellen</button>
-      <button class="btn btn-small reken-mode" data-mode="aftrekken">➖ Aftrekken</button>
-    </div>
-    <div class="reken-stats">
-      <span>Som <strong id="reken-count">1</strong> van <strong id="reken-max">10</strong></span>
-      <span>Score: <strong id="reken-score">0</strong></span>
-    </div>
-    <div class="reken-card">
-      <div id="reken-active">
-        <div id="reken-problem" class="reken-problem"></div>
-        <form id="reken-form" class="reken-form">
-          <input type="number" inputmode="numeric" id="reken-answer" class="reken-input" placeholder="?" autocomplete="off">
-          <button type="submit" class="btn btn-big">✅ Check</button>
-        </form>
-        <p id="reken-message" class="guess-message"></p>
-        <button id="reken-next" class="btn btn-small" hidden>➡️ Volgende som</button>
+    <p class="game-intro">Kies wat je wilt oefenen en hoeveel sommen je wilt maken.</p>
+
+    <div id="reken-setup" class="reken-setup">
+      <p class="reken-setup-label">Wat wil je oefenen?</p>
+      <div class="reken-modes">
+        <button class="btn btn-small reken-mode" data-mode="splitsen">🌳 Splitsen</button>
+        <button class="btn btn-small reken-mode" data-mode="optellen">➕ Optellen</button>
+        <button class="btn btn-small reken-mode" data-mode="aftrekken">➖ Aftrekken</button>
       </div>
-      <div id="reken-done" class="reken-done" hidden>
-        <p class="reken-done-message">🎉 Goed gedaan! Je had <strong id="reken-final-score"></strong> van de 10 sommen goed.</p>
-        <button id="reken-restart" class="btn btn-big">🔄 Opnieuw</button>
+      <div class="reken-count-picker">
+        <label for="reken-count-input">Aantal sommen:</label>
+        <input type="number" id="reken-count-input" min="1" max="50" value="10">
+      </div>
+      <button id="reken-start" class="btn btn-big" disabled>▶️ Start</button>
+    </div>
+
+    <div id="reken-play" hidden>
+      <div class="reken-stats">
+        <span>Som <strong id="reken-count">1</strong> van <strong id="reken-max">10</strong></span>
+        <span>Score: <strong id="reken-score">0</strong></span>
+      </div>
+      <div class="reken-card">
+        <div id="reken-active">
+          <div id="reken-problem" class="reken-problem"></div>
+          <form id="reken-form" class="reken-form">
+            <input type="number" inputmode="numeric" id="reken-answer" class="reken-input" placeholder="?" autocomplete="off">
+            <button type="submit" class="btn btn-big">✅ Check</button>
+          </form>
+          <p id="reken-message" class="guess-message"></p>
+          <button id="reken-next" class="btn btn-small" hidden>➡️ Volgende ➡️</button>
+        </div>
+        <div id="reken-done" class="reken-done" hidden>
+          <p class="reken-done-message">🎉 Goed gedaan! Je had <strong id="reken-final-score"></strong> van de <strong id="reken-final-max"></strong> sommen goed.</p>
+          <button id="reken-restart" class="btn btn-big">🔄 Nieuwe ronde</button>
+        </div>
       </div>
     </div>
   </section>

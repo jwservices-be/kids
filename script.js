@@ -411,37 +411,41 @@ if (guessEmojiEl) {
 const rekenProblemEl = document.getElementById('reken-problem');
 
 if (rekenProblemEl) {
-  const SUMS_PER_ROUND = 10;
+  const setupEl = document.getElementById('reken-setup');
+  const playEl = document.getElementById('reken-play');
   const modeButtons = document.querySelectorAll('.reken-mode');
+  const countInput = document.getElementById('reken-count-input');
+  const startBtn = document.getElementById('reken-start');
   const scoreEl = document.getElementById('reken-score');
   const countEl = document.getElementById('reken-count');
   const activeEl = document.getElementById('reken-active');
   const doneEl = document.getElementById('reken-done');
   const finalScoreEl = document.getElementById('reken-final-score');
+  const finalMaxEl = document.getElementById('reken-final-max');
   const restartBtn = document.getElementById('reken-restart');
   const formEl = document.getElementById('reken-form');
   const answerEl = document.getElementById('reken-answer');
   const messageEl = document.getElementById('reken-message');
   const nextBtn = document.getElementById('reken-next');
 
-  let mode = 'splitsen';
+  let mode = null;
+  let sumsPerRound = 10;
   let answer = null;
   let score = 0;
   let correctCount = 0;
   let sumIndex = 0;
   let answered = false;
 
-  document.getElementById('reken-max').textContent = String(SUMS_PER_ROUND);
-
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   function newProblem() {
-    if (sumIndex >= SUMS_PER_ROUND) {
+    if (sumIndex >= sumsPerRound) {
       activeEl.hidden = true;
       doneEl.hidden = false;
       finalScoreEl.textContent = String(correctCount);
+      finalMaxEl.textContent = String(sumsPerRound);
       return;
     }
 
@@ -499,13 +503,22 @@ if (rekenProblemEl) {
   }
 
   function startRound() {
+    sumsPerRound = Math.min(50, Math.max(1, Number(countInput.value) || 10));
+    document.getElementById('reken-max').textContent = String(sumsPerRound);
     score = 0;
     correctCount = 0;
     sumIndex = 0;
     scoreEl.textContent = '0';
+    setupEl.hidden = true;
+    playEl.hidden = false;
     activeEl.hidden = false;
     doneEl.hidden = true;
     newProblem();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
   }
 
   modeButtons.forEach((btn) => {
@@ -513,15 +526,18 @@ if (rekenProblemEl) {
       modeButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       mode = btn.dataset.mode;
-      startRound();
+      startBtn.disabled = false;
     });
   });
 
+  startBtn.addEventListener('click', startRound);
   formEl.addEventListener('submit', checkAnswer);
   nextBtn.addEventListener('click', newProblem);
-  restartBtn.addEventListener('click', startRound);
+  restartBtn.addEventListener('click', backToSetup);
 
-  startRound();
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'rekenen' && !playEl.hidden) backToSetup();
+  });
 }
 
 // ================================================================
