@@ -623,27 +623,29 @@ if (lettersWordEl) {
   }
 
   function renderWord(filled) {
-    const blank = filled || '···';
+    const blank = filled || '___';
     lettersWordEl.innerHTML = `${current.before}<span class="blank">${blank}</span>${current.after}`;
   }
 
   function handleChoice(option, btn) {
     if (answered) return;
-    answered = true;
-    optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
 
     if (option === current.correct) {
+      answered = true;
+      optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
       btn.classList.add('correct');
       score += 10;
       scoreEl.textContent = String(score);
       messageEl.textContent = '🎉 Juist!';
       messageEl.style.color = 'var(--green)';
       renderWord(current.correct);
+      nextBtn.hidden = false;
+      setTimeout(newWord, 2000);
     } else {
       btn.classList.add('wrong');
-      messageEl.textContent = `Bijna! Het juiste antwoord was "${current.correct}".`;
+      btn.disabled = true;
+      messageEl.textContent = `"${option}" is niet juist, probeer nog eens`;
       messageEl.style.color = 'var(--pink)';
-      renderWord(current.correct);
     }
   }
 
@@ -651,6 +653,7 @@ if (lettersWordEl) {
     current = pickWord();
     answered = false;
     messageEl.textContent = '';
+    nextBtn.hidden = true;
     renderWord(null);
     optionsEl.innerHTML = '';
     shuffle(current.options).forEach((option) => {
