@@ -116,11 +116,25 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 const memoryBoard = document.getElementById('memory-board');
 
 if (memoryBoard) {
-  const EMOJIS = ['🐶', '🐱', '🦁', '🐸', '🐵', '🦄', '🐢', '🐝', '🐘', '🐟', '🦋', '🐬', '🦉', '🐧', '🦒'];
+  const EMOJIS = [
+    '🐶', '🐱', '🦁', '🐸', '🐵', '🦄', '🐢', '🐝', '🐘', '🐟', '🦋', '🐬', '🦉', '🐧', '🦒',
+    '🐴', '🦓', '🦔',
+  ];
+  const SIZES = {
+    klein: { pairs: 8, columns: 4 },
+    middel: { pairs: 15, columns: 6 },
+    groot: { pairs: 18, columns: 6 },
+  };
+
+  const setupEl = document.getElementById('memory-setup');
+  const playEl = document.getElementById('memory-play');
+  const sizeButtons = document.querySelectorAll('.memory-size');
+  const startSetupBtn = document.getElementById('memory-start');
   const movesEl = document.getElementById('memory-moves');
   const winEl = document.getElementById('memory-win');
   const restartBtn = document.getElementById('memory-restart');
 
+  let chosenSize = null;
   let cards = [];
   let flipped = [];
   let matchedCount = 0;
@@ -136,8 +150,10 @@ if (memoryBoard) {
   }
 
   function buildMemoryBoard() {
+    const { pairs, columns } = SIZES[chosenSize];
+    memoryBoard.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
     memoryBoard.innerHTML = '';
-    cards = shuffle([...EMOJIS, ...EMOJIS]);
+    cards = shuffle([...EMOJIS.slice(0, pairs), ...EMOJIS.slice(0, pairs)]);
     flipped = [];
     matchedCount = 0;
     moves = 0;
@@ -191,8 +207,32 @@ if (memoryBoard) {
     }
   }
 
-  restartBtn.addEventListener('click', buildMemoryBoard);
-  buildMemoryBoard();
+  function startGame() {
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    buildMemoryBoard();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  sizeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      sizeButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      chosenSize = btn.dataset.size;
+      startSetupBtn.disabled = false;
+    });
+  });
+
+  startSetupBtn.addEventListener('click', startGame);
+  restartBtn.addEventListener('click', backToSetup);
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'geheugen' && !playEl.hidden) backToSetup();
+  });
 }
 
 // ================================================================

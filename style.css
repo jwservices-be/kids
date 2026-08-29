@@ -206,9 +206,8 @@ img { max-width: 100%; }
 
 .memory-board {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
-  max-width: 360px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
@@ -378,6 +377,16 @@ img { max-width: 100%; }
 }
 
 .reken-mode.active {
+  background: var(--green);
+  color: #fff;
+}
+
+.memory-size {
+  background: var(--card-bg);
+  color: var(--dark);
+}
+
+.memory-size.active {
   background: var(--green);
   color: #fff;
 }
@@ -696,8 +705,8 @@ img { max-width: 100%; }
 @media (max-width: 720px) {
   :root { font-size: 16px; }
 
-  .memory-board { grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
-  .memory-card { font-size: 1.5rem; }
+  .memory-board { gap: 0.4rem; }
+  .memory-card { font-size: 1.4rem; }
 
   #stars-canvas { height: 280px; }
 }
