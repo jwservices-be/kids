@@ -16,6 +16,8 @@
     <nav class="site-nav" id="site-nav">
       <a href="#geheugen" data-route="geheugen">Geheugenspel</a>
       <a href="#raad" data-route="raad">Woordraadsel</a>
+      <a href="#rekenen" data-route="rekenen">Rekenoefening</a>
+      <a href="#letters" data-route="letters">Letters invullen</a>
       <a href="#sterren" data-route="sterren">Sterren vangen</a>
     </nav>
     <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
@@ -43,6 +45,14 @@
     <a href="#raad" class="game-card" data-route="raad" style="--card-color:#6BCB77">
       <span class="card-emoji">🔤</span>
       <span class="card-title">Woordraadsel</span>
+    </a>
+    <a href="#rekenen" class="game-card" data-route="rekenen" style="--card-color:#FFB347">
+      <span class="card-emoji">🔢</span>
+      <span class="card-title">Rekenoefening</span>
+    </a>
+    <a href="#letters" class="game-card" data-route="letters" style="--card-color:#B983FF">
+      <span class="card-emoji">✏️</span>
+      <span class="card-title">Letters invullen</span>
     </a>
     <a href="#sterren" class="game-card" data-route="sterren" style="--card-color:#4D96FF">
       <span class="card-emoji">⭐</span>
@@ -75,6 +85,47 @@
       <div id="guess-letters" class="guess-letters"></div>
       <p id="guess-message" class="guess-message"></p>
       <button id="guess-next" class="btn btn-small">➡️ Volgende dier</button>
+    </div>
+  </section>
+
+  <!-- REKENOEFENING -->
+  <section id="rekenen" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
+    <h2>🔢 Rekenoefening</h2>
+    <p class="game-intro">Los de som op tot 20. Kies eerst een soort rekenen!</p>
+    <div class="reken-modes">
+      <button class="btn btn-small reken-mode active" data-mode="splitsen">🌳 Splitsen</button>
+      <button class="btn btn-small reken-mode" data-mode="optellen">➕ Optellen</button>
+      <button class="btn btn-small reken-mode" data-mode="aftrekken">➖ Aftrekken</button>
+    </div>
+    <div class="reken-stats">
+      <span>Score: <strong id="reken-score">0</strong></span>
+      <span>Goed: <strong id="reken-correct">0</strong> / <strong id="reken-total">0</strong></span>
+    </div>
+    <div class="reken-card">
+      <div id="reken-problem" class="reken-problem"></div>
+      <form id="reken-form" class="reken-form">
+        <input type="number" inputmode="numeric" id="reken-answer" class="reken-input" placeholder="?" autocomplete="off">
+        <button type="submit" class="btn btn-big">✅ Check</button>
+      </form>
+      <p id="reken-message" class="guess-message"></p>
+      <button id="reken-next" class="btn btn-small" hidden>➡️ Volgende som</button>
+    </div>
+  </section>
+
+  <!-- LETTERS INVULLEN -->
+  <section id="letters" class="game-section game-page">
+    <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
+    <h2>✏️ Letters invullen</h2>
+    <p class="game-intro">Welke letters horen in het woord? Kies de juiste!</p>
+    <div class="letters-stats">
+      <span>Score: <strong id="letters-score">0</strong></span>
+    </div>
+    <div class="letters-card">
+      <div id="letters-word" class="letters-word"></div>
+      <div id="letters-options" class="letters-options"></div>
+      <p id="letters-message" class="guess-message"></p>
+      <button id="letters-next" class="btn btn-small">➡️ Volgend woord</button>
     </div>
   </section>
 

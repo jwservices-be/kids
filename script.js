@@ -391,3 +391,191 @@ if (guessEmojiEl) {
   nextBtn.addEventListener('click', newRound);
   newRound();
 }
+
+// ================================================================
+// REKENOEFENING (splitsen, optellen, aftrekken tot 20)
+// ================================================================
+const rekenProblemEl = document.getElementById('reken-problem');
+
+if (rekenProblemEl) {
+  const modeButtons = document.querySelectorAll('.reken-mode');
+  const scoreEl = document.getElementById('reken-score');
+  const correctEl = document.getElementById('reken-correct');
+  const totalEl = document.getElementById('reken-total');
+  const formEl = document.getElementById('reken-form');
+  const answerEl = document.getElementById('reken-answer');
+  const messageEl = document.getElementById('reken-message');
+  const nextBtn = document.getElementById('reken-next');
+
+  let mode = 'splitsen';
+  let answer = null;
+  let score = 0;
+  let correctCount = 0;
+  let totalCount = 0;
+  let answered = false;
+
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function newProblem() {
+    answered = false;
+    answerEl.disabled = false;
+    answerEl.value = '';
+    messageEl.textContent = '';
+    nextBtn.hidden = true;
+    answerEl.focus();
+
+    if (mode === 'splitsen') {
+      const total = randInt(11, 20);
+      const left = randInt(1, total - 1);
+      const right = total - left;
+      const hideLeft = Math.random() < 0.5;
+      answer = hideLeft ? left : right;
+      rekenProblemEl.textContent = hideLeft
+        ? `      ${total}\n   ?      ${right}`
+        : `      ${total}\n   ${left}      ?`;
+    } else if (mode === 'optellen') {
+      const a = randInt(2, 19);
+      const b = randInt(1, 20 - a);
+      answer = a + b;
+      rekenProblemEl.textContent = `${a} + ${b} = ?`;
+    } else {
+      const a = randInt(2, 20);
+      const b = randInt(1, a);
+      answer = a - b;
+      rekenProblemEl.textContent = `${a} - ${b} = ?`;
+    }
+  }
+
+  function checkAnswer(e) {
+    e.preventDefault();
+    if (answered) return;
+    const given = Number(answerEl.value);
+    if (answerEl.value === '' || Number.isNaN(given)) return;
+    answered = true;
+    answerEl.disabled = true;
+    totalCount++;
+    totalEl.textContent = String(totalCount);
+
+    if (given === answer) {
+      score += 10;
+      correctCount++;
+      scoreEl.textContent = String(score);
+      correctEl.textContent = String(correctCount);
+      messageEl.textContent = '🎉 Helemaal goed!';
+      messageEl.style.color = 'var(--green)';
+    } else {
+      messageEl.textContent = `Niet helemaal, het antwoord was ${answer}.`;
+      messageEl.style.color = 'var(--pink)';
+    }
+    nextBtn.hidden = false;
+  }
+
+  modeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      modeButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      mode = btn.dataset.mode;
+      newProblem();
+    });
+  });
+
+  formEl.addEventListener('submit', checkAnswer);
+  nextBtn.addEventListener('click', newProblem);
+
+  newProblem();
+}
+
+// ================================================================
+// LETTERS INVULLEN
+// ================================================================
+const lettersWordEl = document.getElementById('letters-word');
+
+if (lettersWordEl) {
+  const WORDS = [
+    { before: 'b', after: 'r', correct: 'uu', options: ['u', 'uu', 'ui'] },
+    { before: 'paa', after: '', correct: 'rd', options: ['rf', 'rd', 'sr'] },
+    { before: 'n', after: 't', correct: 'oo', options: ['o', 'oo', 'aa'] },
+    { before: 'b', after: 'k', correct: 'ee', options: ['e', 'ee', 'ei'] },
+    { before: 'h', after: 'l', correct: 'ee', options: ['ee', 'eu', 'uu'] },
+    { before: 'ju', after: '', correct: 'f', options: ['v', 'r', 'f'] },
+    { before: '', after: 'oen', correct: 'sch', options: ['cht', 'sch', 'ch'] },
+    { before: 'z', after: 's', correct: 'e', options: ['e', 'ee'] },
+    { before: 'p', after: 'r', correct: 'ee', options: ['e', 'ee'] },
+    { before: 'r', after: 'k', correct: 'u', options: ['u', 'uu'] },
+    { before: 'd', after: 'r', correct: 'uu', options: ['u', 'uu'] },
+    { before: 'st', after: 'r', correct: 'u', options: ['u', 'uu'] },
+    { before: 'va', after: '', correct: 'rd', options: ['rd', 'ng', 'gk'] },
+    { before: '', after: 'ijpen', correct: 'kl', options: ['kl', 'tl', 'gr'] },
+    { before: 'ba', after: '', correct: 'ns', options: ['ns', 'kn', 'nk'] },
+  ];
+
+  const scoreEl = document.getElementById('letters-score');
+  const optionsEl = document.getElementById('letters-options');
+  const messageEl = document.getElementById('letters-message');
+  const nextBtn = document.getElementById('letters-next');
+
+  let current = null;
+  let score = 0;
+  let answered = false;
+
+  function pickWord() {
+    let next;
+    do {
+      next = WORDS[Math.floor(Math.random() * WORDS.length)];
+    } while (current && next === current && WORDS.length > 1);
+    return next;
+  }
+
+  function shuffle(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function renderWord(filled) {
+    const blank = filled || '···';
+    lettersWordEl.innerHTML = `${current.before}<span class="blank">${blank}</span>${current.after}`;
+  }
+
+  function handleChoice(option, btn) {
+    if (answered) return;
+    answered = true;
+    optionsEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
+
+    if (option === current.correct) {
+      btn.classList.add('correct');
+      score += 10;
+      scoreEl.textContent = String(score);
+      messageEl.textContent = '🎉 Juist!';
+      messageEl.style.color = 'var(--green)';
+      renderWord(current.correct);
+    } else {
+      btn.classList.add('wrong');
+      messageEl.textContent = `Bijna! Het juiste antwoord was "${current.correct}".`;
+      messageEl.style.color = 'var(--pink)';
+      renderWord(current.correct);
+    }
+  }
+
+  function newWord() {
+    current = pickWord();
+    answered = false;
+    messageEl.textContent = '';
+    renderWord(null);
+    optionsEl.innerHTML = '';
+    shuffle(current.options).forEach((option) => {
+      const btn = document.createElement('button');
+      btn.textContent = option;
+      btn.addEventListener('click', () => handleChoice(option, btn));
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  nextBtn.addEventListener('click', newWord);
+  newWord();
+}
