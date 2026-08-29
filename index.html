@@ -79,7 +79,7 @@
   <section id="rekenen" class="game-section game-page">
     <a href="#" class="back-link" data-route="home">⬅️ Ga terug naar start</a>
     <h2>🔢 Rekenoefening</h2>
-    <p class="game-intro">Kies wat je wilt oefenen en hoeveel sommen je wilt maken.</p>
+    <p class="game-intro">Kies wat je wilt oefenen, tot welk getal en hoeveel oefeningen je wilt maken.</p>
 
     <div id="reken-setup" class="reken-setup">
       <p class="reken-setup-label">Wat wil je oefenen?</p>
@@ -89,7 +89,11 @@
         <button class="btn btn-small reken-mode" data-mode="aftrekken">➖ Aftrekken</button>
       </div>
       <div class="reken-count-picker">
-        <label for="reken-count-input">Aantal sommen:</label>
+        <label for="reken-max-input">Tot welk getal:</label>
+        <input type="number" id="reken-max-input" min="11" max="999" value="20">
+      </div>
+      <div class="reken-count-picker">
+        <label for="reken-count-input">Aantal oefeningen:</label>
         <input type="number" id="reken-count-input" min="1" max="99" value="10">
       </div>
       <button id="reken-start" class="btn btn-big" disabled>▶️ Start</button>

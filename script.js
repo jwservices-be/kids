@@ -414,12 +414,18 @@ if (rekenProblemEl) {
   const setupEl = document.getElementById('reken-setup');
   const playEl = document.getElementById('reken-play');
   const modeButtons = document.querySelectorAll('.reken-mode');
+  const maxInput = document.getElementById('reken-max-input');
   const countInput = document.getElementById('reken-count-input');
-  countInput.addEventListener('input', () => {
-    const value = Number(countInput.value);
-    if (countInput.value !== '' && (Number.isNaN(value) || value < 1)) countInput.value = '1';
-    if (value > 99) countInput.value = '99';
-  });
+
+  function clampInput(input, min, max, fallback) {
+    input.addEventListener('input', () => {
+      const value = Number(input.value);
+      if (input.value !== '' && (Number.isNaN(value) || value < min)) input.value = String(min);
+      if (value > max) input.value = String(max);
+    });
+  }
+  clampInput(countInput, 1, 99, 10);
+  clampInput(maxInput, 11, 999, 20);
   const startBtn = document.getElementById('reken-start');
   const scoreEl = document.getElementById('reken-score');
   const countEl = document.getElementById('reken-count');
@@ -434,6 +440,7 @@ if (rekenProblemEl) {
   const nextBtn = document.getElementById('reken-next');
 
   let mode = null;
+  let maxNumber = 20;
   let sumsPerRound = 10;
   let answer = null;
   let score = 0;
@@ -464,7 +471,7 @@ if (rekenProblemEl) {
     answerEl.focus();
 
     if (mode === 'splitsen') {
-      const total = randInt(11, 20);
+      const total = randInt(Math.ceil(maxNumber / 2), maxNumber);
       const left = randInt(1, total - 1);
       const right = total - left;
       const hideLeft = Math.random() < 0.5;
@@ -474,12 +481,12 @@ if (rekenProblemEl) {
         <div class="split-children"><span>${hideLeft ? '?' : left}</span><span>${hideLeft ? right : '?'}</span></div>
       </div>`;
     } else if (mode === 'optellen') {
-      const a = randInt(2, 19);
-      const b = randInt(1, 20 - a);
+      const a = randInt(2, maxNumber - 1);
+      const b = randInt(1, maxNumber - a);
       answer = a + b;
       rekenProblemEl.textContent = `${a} + ${b} = ?`;
     } else {
-      const a = randInt(2, 20);
+      const a = randInt(2, maxNumber);
       const b = randInt(1, a);
       answer = a - b;
       rekenProblemEl.textContent = `${a} - ${b} = ?`;
@@ -512,6 +519,7 @@ if (rekenProblemEl) {
 
   function startRound() {
     sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    maxNumber = Math.min(999, Math.max(11, Number(maxInput.value) || 20));
     document.getElementById('reken-max').textContent = String(sumsPerRound);
     score = 0;
     correctCount = 0;

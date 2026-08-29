@@ -135,7 +135,7 @@ img { max-width: 100%; }
 .game-section {
   max-width: 900px;
   margin: 0 auto;
-  padding: 3rem 1.2rem;
+  padding: 0.8rem 1.2rem 1.5rem;
   text-align: center;
   scroll-margin-top: 80px;
 }
@@ -152,24 +152,25 @@ img { max-width: 100%; }
   display: inline-block;
   text-decoration: none;
   font-weight: bold;
+  font-size: 0.9rem;
   color: var(--dark);
   background: var(--card-bg);
   border-radius: 999px;
-  padding: 0.5rem 1.2rem;
+  padding: 0.35rem 1rem;
   box-shadow: var(--shadow);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .back-link:hover { color: var(--pink); }
 
 .game-section h2 {
-  font-size: 2rem;
-  margin-bottom: 0.3rem;
+  font-size: 1.6rem;
+  margin: 0 0 0.2rem;
 }
 
 .game-intro {
-  margin-bottom: 1.5rem;
-  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
 }
 
 /* ---------- Memory game ---------- */
@@ -195,17 +196,17 @@ img { max-width: 100%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
   flex-wrap: wrap;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .memory-board {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
-  max-width: 480px;
+  gap: 0.5rem;
+  max-width: 360px;
   margin: 0 auto;
 }
 
@@ -238,8 +239,8 @@ img { max-width: 100%; }
 .memory-card:not(.flipped):not(.matched) .face-back { display: block; }
 
 .win-message {
-  margin-top: 1.5rem;
-  font-size: 1.3rem;
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: var(--green);
 }
@@ -259,7 +260,7 @@ img { max-width: 100%; }
 #stars-canvas {
   display: block;
   width: 100%;
-  height: 420px;
+  height: 340px;
   touch-action: none;
 }
 
@@ -280,7 +281,7 @@ img { max-width: 100%; }
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .reken-mode {
@@ -293,13 +294,23 @@ img { max-width: 100%; }
   color: #fff;
 }
 
+.reken-range {
+  background: var(--card-bg);
+  color: var(--dark);
+}
+
+.reken-range.active {
+  background: var(--green);
+  color: #fff;
+}
+
 .reken-setup {
   background: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1.2rem 1.5rem;
   text-align: center;
 }
 
@@ -313,7 +324,7 @@ img { max-width: 100%; }
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
-  margin: 1.5rem 0;
+  margin: 0.8rem 0;
 }
 
 .reken-count-picker input {
@@ -330,8 +341,8 @@ img { max-width: 100%; }
   display: flex;
   justify-content: center;
   gap: 1.2rem;
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
 }
 
 .reken-card {
@@ -340,7 +351,7 @@ img { max-width: 100%; }
   box-shadow: var(--shadow);
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1.2rem 1.5rem;
 }
 
 .reken-problem {
@@ -399,15 +410,15 @@ img { max-width: 100%; }
 }
 
 .reken-done-message {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 /* ---------- Letters invullen ---------- */
 .letters-stats {
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
 }
 
 .letters-card {
@@ -416,14 +427,14 @@ img { max-width: 100%; }
   box-shadow: var(--shadow);
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1.2rem 1.5rem;
 }
 
 .letters-word {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: bold;
   letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .letters-word .blank {
@@ -463,17 +474,17 @@ img { max-width: 100%; }
   box-shadow: var(--shadow);
   max-width: 480px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1.2rem 1.5rem;
 }
 
-.guess-emoji { font-size: 4rem; margin-bottom: 1rem; }
+.guess-emoji { font-size: 3.2rem; margin-bottom: 0.6rem; }
 
 .guess-word {
   display: flex;
   justify-content: center;
   gap: 0.4rem;
   flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .guess-slot {
@@ -536,5 +547,5 @@ img { max-width: 100%; }
   .memory-board { grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
   .memory-card { font-size: 1.5rem; }
 
-  #stars-canvas { height: 340px; }
+  #stars-canvas { height: 280px; }
 }
