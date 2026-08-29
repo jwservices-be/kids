@@ -496,7 +496,7 @@ if (rekenProblemEl) {
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
     } else {
-      messageEl.textContent = `Niet helemaal, het antwoord was ${answer}.`;
+      messageEl.textContent = 'Niet juist, probeer nog eens';
       messageEl.style.color = 'var(--pink)';
     }
     nextBtn.hidden = false;
