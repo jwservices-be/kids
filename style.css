@@ -491,27 +491,32 @@ img { max-width: 100%; }
 .letters-options button.wrong { background: var(--pink); color: #fff; }
 .letters-options button:disabled { opacity: 0.5; }
 
-/* ---------- Auto-advance progress bar ---------- */
-.auto-advance-bar {
-  width: 100%;
-  max-width: 260px;
-  height: 10px;
-  margin: 0.8rem auto 0;
-  border-radius: 999px;
-  background: #eee;
+/* ---------- Auto-advance progress button ---------- */
+.btn-progress {
+  position: relative;
   overflow: hidden;
+  background: var(--blue);
 }
 
-.auto-advance-fill {
-  height: 100%;
+.btn-progress-fill {
+  position: absolute;
+  inset: 0;
   width: 0%;
-  border-radius: 999px;
   background: var(--green);
+  z-index: 0;
 }
 
-.auto-advance-fill.filling {
+.btn-progress-fill.filling {
   width: 100%;
   transition: width 2s linear;
+}
+
+.btn-progress-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 /* ---------- Word guess ---------- */

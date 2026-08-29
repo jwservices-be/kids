@@ -1,13 +1,11 @@
-// ---------- Auto-advance progress bar helper ----------
-function startAutoAdvanceBar(barEl, fillEl) {
-  barEl.hidden = false;
+// ---------- Auto-advance progress button helper ----------
+function startAutoAdvanceBar(fillEl) {
   fillEl.classList.remove('filling');
   void fillEl.offsetWidth;
   fillEl.classList.add('filling');
 }
 
-function resetAutoAdvanceBar(barEl, fillEl) {
-  barEl.hidden = true;
+function resetAutoAdvanceBar(fillEl) {
   fillEl.classList.remove('filling');
 }
 
@@ -465,8 +463,7 @@ if (rekenProblemEl) {
   const answerEl = document.getElementById('reken-answer');
   const messageEl = document.getElementById('reken-message');
   const nextBtn = document.getElementById('reken-next');
-  const progressBar = document.getElementById('reken-progress');
-  const progressFill = document.getElementById('reken-progress-fill');
+  const progressFill = document.getElementById('reken-next-fill');
   let advanceTimeout = null;
 
   let mode = null;
@@ -515,7 +512,7 @@ if (rekenProblemEl) {
     messageEl.textContent = '';
     nextBtn.hidden = true;
     if (advanceTimeout) clearTimeout(advanceTimeout);
-    resetAutoAdvanceBar(progressBar, progressFill);
+    resetAutoAdvanceBar(progressFill);
     answerEl.focus();
 
     if (mode === 'splitsen') {
@@ -556,7 +553,7 @@ if (rekenProblemEl) {
       messageEl.textContent = '🎉 Helemaal goed!';
       messageEl.style.color = 'var(--green)';
       nextBtn.hidden = false;
-      startAutoAdvanceBar(progressBar, progressFill);
+      startAutoAdvanceBar(progressFill);
       advanceTimeout = setTimeout(newProblem, 2000);
     } else {
       messageEl.textContent = `${given} is niet juist, probeer nog eens`;
@@ -633,8 +630,7 @@ if (lettersWordEl) {
   const optionsEl = document.getElementById('letters-options');
   const messageEl = document.getElementById('letters-message');
   const nextBtn = document.getElementById('letters-next');
-  const progressBar = document.getElementById('letters-progress');
-  const progressFill = document.getElementById('letters-progress-fill');
+  const progressFill = document.getElementById('letters-next-fill');
   let advanceTimeout = null;
 
   let current = null;
@@ -676,7 +672,7 @@ if (lettersWordEl) {
       messageEl.style.color = 'var(--green)';
       renderWord(current.correct);
       nextBtn.hidden = false;
-      startAutoAdvanceBar(progressBar, progressFill);
+      startAutoAdvanceBar(progressFill);
       advanceTimeout = setTimeout(newWord, 2000);
     } else {
       btn.classList.add('wrong');
@@ -692,7 +688,7 @@ if (lettersWordEl) {
     messageEl.textContent = '';
     nextBtn.hidden = true;
     if (advanceTimeout) clearTimeout(advanceTimeout);
-    resetAutoAdvanceBar(progressBar, progressFill);
+    resetAutoAdvanceBar(progressFill);
     renderWord(null);
     optionsEl.innerHTML = '';
     shuffle(current.options).forEach((option) => {

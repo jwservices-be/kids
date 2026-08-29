@@ -112,8 +112,10 @@
             <button type="submit" class="btn btn-big">✅ Check</button>
           </form>
           <p id="reken-message" class="guess-message"></p>
-          <div id="reken-progress" class="auto-advance-bar" hidden><div id="reken-progress-fill" class="auto-advance-fill"></div></div>
-          <button id="reken-next" class="btn btn-small" hidden>➡️ Volgende ➡️</button>
+          <button id="reken-next" class="btn btn-small btn-progress" hidden>
+            <span id="reken-next-fill" class="btn-progress-fill"></span>
+            <span class="btn-progress-label">➡️ Volgende ➡️</span>
+          </button>
         </div>
         <div id="reken-done" class="reken-done" hidden>
           <div id="reken-done-emoji" class="reken-done-emoji">🏆</div>
@@ -138,8 +140,10 @@
       <div id="letters-word" class="letters-word"></div>
       <div id="letters-options" class="letters-options"></div>
       <p id="letters-message" class="guess-message"></p>
-      <div id="letters-progress" class="auto-advance-bar" hidden><div id="letters-progress-fill" class="auto-advance-fill"></div></div>
-      <button id="letters-next" class="btn btn-small" hidden>➡️ Volgende ➡️</button>
+      <button id="letters-next" class="btn btn-small btn-progress" hidden>
+        <span id="letters-next-fill" class="btn-progress-fill"></span>
+        <span class="btn-progress-label">➡️ Volgende ➡️</span>
+      </button>
     </div>
   </section>
 
