@@ -15,8 +15,8 @@
     <span class="logo">🎈 Waerlop spelen</span>
     <nav class="site-nav" id="site-nav">
       <a href="#geheugen">Geheugenspel</a>
-      <a href="#sterren">Sterren vangen</a>
       <a href="#raad">Woordraadsel</a>
+      <a href="#sterren">Sterren vangen</a>
     </nav>
     <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
       <span></span><span></span><span></span>
@@ -40,13 +40,13 @@
       <span class="card-emoji">🧠</span>
       <span class="card-title">Geheugenspel</span>
     </a>
-    <a href="#sterren" class="game-card" style="--card-color:#4D96FF">
-      <span class="card-emoji">⭐</span>
-      <span class="card-title">Sterren vangen</span>
-    </a>
     <a href="#raad" class="game-card" style="--card-color:#6BCB77">
       <span class="card-emoji">🔤</span>
       <span class="card-title">Woordraadsel</span>
+    </a>
+    <a href="#sterren" class="game-card" style="--card-color:#4D96FF">
+      <span class="card-emoji">⭐</span>
+      <span class="card-title">Sterren vangen</span>
     </a>
   </section>
 
@@ -60,6 +60,19 @@
     </div>
     <div id="memory-board" class="memory-board"></div>
     <p id="memory-win" class="win-message" hidden>🎉 Gewonnen! Goed gedaan!</p>
+  </section>
+
+  <!-- WORD GUESS GAME -->
+  <section id="raad" class="game-section">
+    <h2>🔤 Woordraadsel</h2>
+    <p class="game-intro">Raad het dier aan de hand van de emoji-hint!</p>
+    <div class="guess-card">
+      <div id="guess-emoji" class="guess-emoji">🐶</div>
+      <div id="guess-word" class="guess-word"></div>
+      <div id="guess-letters" class="guess-letters"></div>
+      <p id="guess-message" class="guess-message"></p>
+      <button id="guess-next" class="btn btn-small">➡️ Volgende dier</button>
+    </div>
   </section>
 
   <!-- CATCH THE STARS GAME -->
@@ -76,19 +89,6 @@
       <div id="stars-overlay" class="canvas-overlay">
         <button id="stars-start" class="btn btn-big">▶️ Start spel</button>
       </div>
-    </div>
-  </section>
-
-  <!-- WORD GUESS GAME -->
-  <section id="raad" class="game-section">
-    <h2>🔤 Woordraadsel</h2>
-    <p class="game-intro">Raad het dier aan de hand van de emoji-hint!</p>
-    <div class="guess-card">
-      <div id="guess-emoji" class="guess-emoji">🐶</div>
-      <div id="guess-word" class="guess-word"></div>
-      <div id="guess-letters" class="guess-letters"></div>
-      <p id="guess-message" class="guess-message"></p>
-      <button id="guess-next" class="btn btn-small">➡️ Volgende dier</button>
     </div>
   </section>
 
