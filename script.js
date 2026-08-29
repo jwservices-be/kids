@@ -685,6 +685,26 @@ if (guessEmojiEl) {
     { emoji: '🐝', word: 'BIJ' },
     { emoji: '🐘', word: 'OLIFANT' },
     { emoji: '🐟', word: 'VIS' },
+    { emoji: '🐭', word: 'MUIS' },
+    { emoji: '🐻', word: 'BEER' },
+    { emoji: '🐮', word: 'KOE' },
+    { emoji: '🐷', word: 'VARKEN' },
+    { emoji: '🐑', word: 'SCHAAP' },
+    { emoji: '🐴', word: 'PAARD' },
+    { emoji: '🐔', word: 'KIP' },
+    { emoji: '🦆', word: 'EEND' },
+    { emoji: '🦉', word: 'UIL' },
+    { emoji: '🦊', word: 'VOS' },
+    { emoji: '🐺', word: 'WOLF' },
+    { emoji: '🐯', word: 'TIJGER' },
+    { emoji: '🦓', word: 'ZEBRA' },
+    { emoji: '🦒', word: 'GIRAF' },
+    { emoji: '🐧', word: 'PINGUIN' },
+    { emoji: '🐨', word: 'KOALA' },
+    { emoji: '🐼', word: 'PANDA' },
+    { emoji: '🦈', word: 'HAAI' },
+    { emoji: '🐬', word: 'DOLFIJN' },
+    { emoji: '🦀', word: 'KRAB' },
   ];
 
   const setupEl = document.getElementById('guess-setup');
@@ -706,7 +726,7 @@ if (guessEmojiEl) {
   const progressFill = document.getElementById('guess-next-fill');
   let advanceTimeout = null;
 
-  clampInputRange(countInput, 1, 99);
+  clampInputRange(countInput, 1, 30);
 
   const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   let current = null;
@@ -800,7 +820,7 @@ if (guessEmojiEl) {
   }
 
   function startRound() {
-    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    sumsPerRound = Math.min(30, Math.max(1, Number(countInput.value) || 10));
     document.getElementById('guess-max').textContent = String(sumsPerRound);
     score = 0;
     wrongTotal = 0;
@@ -1025,7 +1045,7 @@ if (lettersWordEl) {
     { before: 'ba', after: '', correct: 'nk', options: ['ns', 'kn', 'nk'] },
     { before: 'b', after: 'd', correct: 'e', options: ['e', 'ee'] },
     { before: 'g', after: 'k', correct: 'e', options: ['e', 'ee'] },
-    { before: 'm', after: 'r', correct: 'ee', options: ['e', 'ee'] },
+    { before: 'k', after: 'r', correct: 'ee', options: ['e', 'ee'] },
     { before: 'w', after: 'r', correct: 'ee', options: ['e', 'ee'] },
     { before: 'h', after: 'k', correct: 'e', options: ['e', 'ee'] },
     { before: 'd', after: 'k', correct: 'e', options: ['e', 'ee'] },
@@ -1033,8 +1053,8 @@ if (lettersWordEl) {
     { before: 'n', after: 'st', correct: 'e', options: ['e', 'ee'] },
     { before: 'g', after: 'n', correct: 'ee', options: ['e', 'ee'] },
     { before: 'r', after: 'p', correct: 'ee', options: ['e', 'ee'] },
-    { before: 'r', after: 'k', correct: 'e', options: ['e', 'ee'] },
-    { before: 'b', after: 'r', correct: 'ee', options: ['e', 'ee'] },
+    { before: 'k', after: 'l', correct: 'ee', options: ['e', 'ee'] },
+    { before: 'l', after: 'r', correct: 'ee', options: ['e', 'ee'] },
     { before: 'b', after: 'rg', correct: 'e', options: ['e', 'ee'] },
     { before: 'f', after: 'st', correct: 'ee', options: ['e', 'ee'] },
     { before: 'd', after: 'n', correct: 'u', options: ['u', 'uu'] },
@@ -1067,7 +1087,7 @@ if (lettersWordEl) {
   const progressFill = document.getElementById('letters-next-fill');
   let advanceTimeout = null;
 
-  clampInputRange(countInput, 1, 99);
+  clampInputRange(countInput, 1, 39);
 
   let current = null;
   let score = 0;
@@ -1156,7 +1176,7 @@ if (lettersWordEl) {
   }
 
   function startRound() {
-    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    sumsPerRound = Math.min(39, Math.max(1, Number(countInput.value) || 10));
     document.getElementById('letters-max').textContent = String(sumsPerRound);
     score = 0;
     wrongTotal = 0;
@@ -1228,7 +1248,7 @@ if (zinnenSentenceEl) {
   const progressFill = document.getElementById('zinnen-next-fill');
   let advanceTimeout = null;
 
-  clampInputRange(countInput, 1, 99);
+  clampInputRange(countInput, 1, 15);
 
   let current = null;
   let score = 0;
@@ -1317,7 +1337,7 @@ if (zinnenSentenceEl) {
   }
 
   function startRound() {
-    sumsPerRound = Math.min(99, Math.max(1, Number(countInput.value) || 10));
+    sumsPerRound = Math.min(15, Math.max(1, Number(countInput.value) || 10));
     document.getElementById('zinnen-max').textContent = String(sumsPerRound);
     score = 0;
     wrongTotal = 0;
