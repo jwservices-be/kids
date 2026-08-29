@@ -116,7 +116,7 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 const memoryBoard = document.getElementById('memory-board');
 
 if (memoryBoard) {
-  const EMOJIS = ['🐶', '🐱', '🦁', '🐸', '🐵', '🦄', '🐢', '🐝'];
+  const EMOJIS = ['🐶', '🐱', '🦁', '🐸', '🐵', '🦄', '🐢', '🐝', '🐘', '🐟', '🦋', '🐬', '🦉', '🐧', '🦒'];
   const movesEl = document.getElementById('memory-moves');
   const winEl = document.getElementById('memory-win');
   const restartBtn = document.getElementById('memory-restart');
@@ -388,7 +388,7 @@ if (silhouettesEl) {
   const restartBtn = document.getElementById('shadow-restart');
   const winEl = document.getElementById('shadow-win');
 
-  const ANIMALS = ['🐶', '🐱', '🐮', '🐑', '🐔', '🦆', '🐸', '🐰'];
+  const ANIMALS = ['🐶', '🐱', '🐮', '🐑', '🐔', '🦆', '🐸', '🐰', '🐴', '🐷', '🦉', '🐢', '🐝', '🦋', '🐻'];
 
   let matchedCount = 0;
   let moves = 0;
