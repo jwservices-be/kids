@@ -136,7 +136,7 @@ if (memoryBoard) {
   const winEl = document.getElementById('memory-win');
   const restartBtn = document.getElementById('memory-restart');
 
-  let chosenSize = null;
+  let chosenSize = 'klein';
   let cards = [];
   let flipped = [];
   let matchedCount = 0;
