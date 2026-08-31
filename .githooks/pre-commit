@@ -1,0 +1,11 @@
+#!/bin/sh
+# Auto-updates the cache-busting version query string on style.css/script.js
+# links in index.html, based on a short hash of their combined contents.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+HASH=$(cat style.css script.js | sha1sum | cut -c1-8)
+
+sed -i.bak -E "s/(style\.css\?v=)[a-zA-Z0-9]+/\1${HASH}/; s/(script\.js\?v=)[a-zA-Z0-9]+/\1${HASH}/" index.html
+rm -f index.html.bak
+
+git add index.html

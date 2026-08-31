@@ -40,6 +40,27 @@ function makePicker(list) {
   };
 }
 
+// ---------- Persisted settings (per game, remembered between bezoeken) ----------
+function saveSetting(key, value) {
+  try {
+    localStorage.setItem(`waerlop:${key}`, value);
+  } catch (e) { /* localStorage kan geblokkeerd zijn, negeer dan gewoon */ }
+}
+
+function loadSetting(key) {
+  try {
+    return localStorage.getItem(`waerlop:${key}`);
+  } catch (e) {
+    return null;
+  }
+}
+
+function persistInput(input, key) {
+  const saved = loadSetting(key);
+  if (saved !== null) input.value = saved;
+  input.addEventListener('change', () => saveSetting(key, input.value));
+}
+
 function setDoneMessage(ratio, emojiId, titleId) {
   const emojiEl = document.getElementById(emojiId);
   const titleEl = document.getElementById(titleId);
@@ -136,7 +157,8 @@ if (memoryBoard) {
   const winEl = document.getElementById('memory-win');
   const restartBtn = document.getElementById('memory-restart');
 
-  let chosenSize = 'klein';
+  let chosenSize = loadSetting('memory-size') || 'klein';
+  sizeButtons.forEach((b) => b.classList.toggle('active', b.dataset.size === chosenSize));
   let cards = [];
   let flipped = [];
   let matchedCount = 0;
@@ -225,6 +247,7 @@ if (memoryBoard) {
       sizeButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       chosenSize = btn.dataset.size;
+      saveSetting('memory-size', chosenSize);
       startSetupBtn.disabled = false;
     });
   });
@@ -1337,6 +1360,13 @@ if (rekenProblemEl) {
   formEl.addEventListener('submit', checkAnswer);
   nextBtn.addEventListener('click', newProblem);
   restartBtn.addEventListener('click', backToSetup);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
+      e.preventDefault();
+      newProblem();
+    }
+  });
 
   window.addEventListener('routechange', (e) => {
     if (e.detail.route !== 'rekenen' && !playEl.hidden) backToSetup();
