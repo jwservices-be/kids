@@ -816,7 +816,7 @@ if (silhouettesEl) {
   const playEl = document.getElementById('shadow-play');
   const countInput = document.getElementById('shadow-count-input');
   const startBtn = document.getElementById('shadow-start');
-  clampInputRange(countInput, 4, 15);
+  clampInputRange(countInput, 1, 15);
   persistInput(countInput, 'shadow-count');
   const animalsEl = document.getElementById('shadow-animals');
   const foundEl = document.getElementById('shadow-found');
@@ -843,7 +843,7 @@ if (silhouettesEl) {
   }
 
   function buildBoard() {
-    const tilesPerRound = Math.min(15, Math.max(4, Number(countInput.value) || 10));
+    const tilesPerRound = Math.min(15, Math.max(1, Number(countInput.value) || 10));
     silhouettesEl.innerHTML = '';
     animalsEl.innerHTML = '';
     matchedCount = 0;
