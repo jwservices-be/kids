@@ -387,14 +387,19 @@ img { max-width: 100%; }
 .reken-modes {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.6rem;
+  flex-wrap: nowrap;
   margin-bottom: 1rem;
 }
 
 .reken-mode {
   background: var(--card-bg);
   color: var(--dark);
+  flex: 1 1 0;
+  min-width: 0;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
+  white-space: nowrap;
 }
 
 .reken-mode.active {
