@@ -133,6 +133,55 @@ if (menuToggle && siteNav) {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+// ---------- Feedback modal ----------
+const feedbackModal = document.getElementById('feedback-modal');
+const feedbackOpenBtn = document.querySelector('[data-open-modal]');
+const feedbackCloseBtn = feedbackModal ? feedbackModal.querySelector('.modal-close') : null;
+const feedbackForm = document.getElementById('feedback-form');
+
+if (feedbackModal && feedbackOpenBtn) {
+  feedbackOpenBtn.addEventListener('click', () => {
+    feedbackModal.hidden = false;
+    document.getElementById('fb-bericht').focus();
+  });
+
+  feedbackCloseBtn.addEventListener('click', () => {
+    feedbackModal.hidden = true;
+  });
+
+  feedbackModal.addEventListener('click', (e) => {
+    if (e.target === feedbackModal) feedbackModal.hidden = true;
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !feedbackModal.hidden) feedbackModal.hidden = true;
+  });
+
+  feedbackForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(feedbackForm);
+
+    feedbackForm.reset();
+    feedbackModal.hidden = true;
+
+    try {
+      await fetch(feedbackForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' },
+      });
+    } catch (error) {
+      // stille fout, geen actie nodig
+    }
+
+    const banner = document.getElementById('feedback-banner');
+    banner.hidden = false;
+    setTimeout(() => {
+      banner.hidden = true;
+    }, 3000);
+  });
+}
+
 // ================================================================
 // MEMORY GAME
 // ================================================================
