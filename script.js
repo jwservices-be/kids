@@ -266,6 +266,12 @@ if (memoryBoard) {
 const diffPanelLeft = document.getElementById('diff-panel-left');
 
 if (diffPanelLeft) {
+  const setupEl = document.getElementById('verschillen-setup');
+  const playEl = document.getElementById('verschillen-play');
+  const countInput = document.getElementById('verschillen-count-input');
+  const startBtn = document.getElementById('verschillen-start');
+  clampInputRange(countInput, 1, 20);
+  persistInput(countInput, 'verschillen-count');
   const diffPanelRight = document.getElementById('diff-panel-right');
   const sceneNumEl = document.getElementById('diff-scene-num');
   const sceneMaxEl = document.getElementById('diff-scene-max');
@@ -683,7 +689,7 @@ if (diffPanelLeft) {
   ];
 
   let sceneIndex = 0;
-  let sceneOrder = shuffleArray(SCENES.map((_, i) => i));
+  let sceneOrder = [];
   let foundCount = 0;
   let found = [];
 
@@ -742,7 +748,7 @@ if (diffPanelLeft) {
   diffPanelRight.addEventListener('click', (e) => handleClick(e, 'right'));
 
   function newScene() {
-    if (sceneIndex >= SCENES.length) {
+    if (sceneIndex >= sceneOrder.length) {
       activeEl.hidden = true;
       doneEl.hidden = false;
       return;
@@ -750,7 +756,7 @@ if (diffPanelLeft) {
 
     const scene = SCENES[sceneOrder[sceneIndex]];
     sceneNumEl.textContent = String(sceneIndex + 1);
-    sceneMaxEl.textContent = String(SCENES.length);
+    sceneMaxEl.textContent = String(sceneOrder.length);
     totalEl.textContent = String(scene.diffs.length);
     foundCount = 0;
     found = [];
@@ -768,25 +774,36 @@ if (diffPanelLeft) {
     newScene();
   }
 
-  function restartAll() {
+  function startRound() {
+    const count = Math.min(20, Math.max(1, Number(countInput.value) || 10));
     sceneIndex = 0;
-    sceneOrder = shuffleArray(SCENES.map((_, i) => i));
+    sceneOrder = shuffleArray(SCENES.map((_, i) => i)).slice(0, count);
+    setupEl.hidden = true;
+    playEl.hidden = false;
     activeEl.hidden = false;
     doneEl.hidden = true;
     newScene();
   }
 
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', goToNextScene);
-  restartBtn.addEventListener('click', restartAll);
+  restartBtn.addEventListener('click', backToSetup);
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !nextBtn.hidden && document.getElementById('verschillen').classList.contains('active')) {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
       e.preventDefault();
       goToNextScene();
     }
   });
 
-  newScene();
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'verschillen' && !playEl.hidden) backToSetup();
+  });
 }
 
 // ================================================================
@@ -795,6 +812,12 @@ if (diffPanelLeft) {
 const silhouettesEl = document.getElementById('shadow-silhouettes');
 
 if (silhouettesEl) {
+  const setupEl = document.getElementById('shadow-setup');
+  const playEl = document.getElementById('shadow-play');
+  const countInput = document.getElementById('shadow-count-input');
+  const startBtn = document.getElementById('shadow-start');
+  clampInputRange(countInput, 4, 15);
+  persistInput(countInput, 'shadow-count');
   const animalsEl = document.getElementById('shadow-animals');
   const foundEl = document.getElementById('shadow-found');
   const totalEl = document.getElementById('shadow-total');
@@ -819,9 +842,8 @@ if (silhouettesEl) {
     return copy;
   }
 
-  const TILES_PER_ROUND = 12;
-
   function buildBoard() {
+    const tilesPerRound = Math.min(15, Math.max(4, Number(countInput.value) || 10));
     silhouettesEl.innerHTML = '';
     animalsEl.innerHTML = '';
     matchedCount = 0;
@@ -832,7 +854,7 @@ if (silhouettesEl) {
     movesEl.textContent = '0';
     winEl.hidden = true;
 
-    const roundAnimals = shuffle(ANIMALS).slice(0, TILES_PER_ROUND);
+    const roundAnimals = shuffle(ANIMALS).slice(0, tilesPerRound);
     roundSize = roundAnimals.length;
     totalEl.textContent = String(roundSize);
 
@@ -893,8 +915,23 @@ if (silhouettesEl) {
     }
   }
 
+  function startRound() {
+    setupEl.hidden = true;
+    playEl.hidden = false;
+    buildBoard();
+  }
+
+  function backToSetup() {
+    playEl.hidden = true;
+    setupEl.hidden = false;
+  }
+
+  startBtn.addEventListener('click', startRound);
   restartBtn.addEventListener('click', buildBoard);
-  buildBoard();
+
+  window.addEventListener('routechange', (e) => {
+    if (e.detail.route !== 'schaduw' && !playEl.hidden) backToSetup();
+  });
 }
 
 // ================================================================
