@@ -5,6 +5,8 @@
   --yellow: #FFD93D;
   --purple: #B983FF;
   --dark: #2E2A4A;
+  --green-text: #1c6b2e;
+  --pink-text: #c22d5e;
   --bg: #FFF9EE;
   --card-bg: #ffffff;
   --radius: 20px;
@@ -178,7 +180,7 @@ img { max-width: 100%; }
   margin-bottom: 0.8rem;
 }
 
-.back-link:hover { color: var(--pink); }
+.back-link:hover { color: var(--pink-text); }
 
 .game-section h2 {
   font-size: 1.6rem;
@@ -240,7 +242,7 @@ img { max-width: 100%; }
   margin-top: 0.8rem;
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--green);
+  color: var(--green-text);
 }
 
 /* ---------- Shadow matching game ---------- */
@@ -540,14 +542,14 @@ img { max-width: 100%; }
 .reken-done-title {
   font-size: 1.8rem;
   font-weight: bold;
-  color: var(--pink);
+  color: var(--pink-text);
   margin: 0.2rem 0;
 }
 
 .reken-done-score {
   font-size: 2.4rem;
   font-weight: bold;
-  color: var(--green);
+  color: var(--green-text);
   margin: 0.3rem 0;
 }
 
@@ -593,11 +595,11 @@ img { max-width: 100%; }
   display: inline-block;
   min-width: 90px;
   border-bottom: 3px solid var(--purple);
-  color: var(--pink);
+  color: var(--pink-text);
 }
 
 .letters-word .blank {
-  color: var(--pink);
+  color: var(--pink-text);
 }
 
 .letters-options {

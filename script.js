@@ -505,7 +505,7 @@ if (diffPanelLeft) {
         addMarker(diffPanelRight, d.rx, d.ry);
         if (foundCount === scene.diffs.length) {
           messageEl.textContent = '🎉 Prachtig! Je hebt alle verschillen gevonden!';
-          messageEl.style.color = 'var(--green)';
+          messageEl.style.color = 'var(--green-text)';
           nextBtn.hidden = false;
           startAutoAdvanceBar(progressFill);
           advanceTimeout = setTimeout(goToNextScene, 2500);
@@ -762,7 +762,7 @@ if (vormenQuestionEl) {
         scoreEl.textContent = String(score);
       }
       messageEl.textContent = '🎉 Juist!';
-      messageEl.style.color = 'var(--green)';
+      messageEl.style.color = 'var(--green-text)';
       nextBtn.hidden = false;
       startAutoAdvanceBar(progressFill);
       advanceTimeout = setTimeout(newQuestion, 2000);
@@ -773,7 +773,7 @@ if (vormenQuestionEl) {
       wrongTotal++;
       wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = 'Niet juist, probeer nog eens';
-      messageEl.style.color = 'var(--pink)';
+      messageEl.style.color = 'var(--pink-text)';
     }
   }
 
@@ -939,7 +939,7 @@ if (getallenProblemEl) {
         scoreEl.textContent = String(score);
       }
       messageEl.textContent = '🎉 Helemaal goed!';
-      messageEl.style.color = 'var(--green)';
+      messageEl.style.color = 'var(--green-text)';
       nextBtn.hidden = false;
       startAutoAdvanceBar(progressFill);
       advanceTimeout = setTimeout(newProblem, 2000);
@@ -950,7 +950,7 @@ if (getallenProblemEl) {
       wrongTotal++;
       wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `${num} is niet juist, probeer nog eens`;
-      messageEl.style.color = 'var(--pink)';
+      messageEl.style.color = 'var(--pink-text)';
     }
   }
 
@@ -1097,7 +1097,7 @@ if (guessEmojiEl) {
           scoreEl.textContent = String(score);
         }
         messageEl.textContent = '🎉 Goed geraden!';
-        messageEl.style.color = 'var(--green)';
+        messageEl.style.color = 'var(--green-text)';
         lettersEl.querySelectorAll('button').forEach((b) => (b.disabled = true));
         nextBtn.hidden = false;
         startAutoAdvanceBar(progressFill);
@@ -1109,7 +1109,7 @@ if (guessEmojiEl) {
       wrongTotal++;
       wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `"${letter}" zit niet in het woord, probeer nog eens`;
-      messageEl.style.color = 'var(--pink)';
+      messageEl.style.color = 'var(--pink-text)';
     }
   }
 
@@ -1283,7 +1283,7 @@ if (rekenProblemEl) {
         scoreEl.textContent = String(score);
       }
       messageEl.textContent = '🎉 Helemaal goed!';
-      messageEl.style.color = 'var(--green)';
+      messageEl.style.color = 'var(--green-text)';
       nextBtn.hidden = false;
       startAutoAdvanceBar(progressFill);
       advanceTimeout = setTimeout(newProblem, 2000);
@@ -1292,7 +1292,7 @@ if (rekenProblemEl) {
       wrongTotal++;
       wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `${given} is niet juist, probeer nog eens`;
-      messageEl.style.color = 'var(--pink)';
+      messageEl.style.color = 'var(--pink-text)';
       answerEl.value = '';
       answerEl.focus();
     }
@@ -1512,7 +1512,7 @@ if (lettersWordEl) {
         scoreEl.textContent = String(score);
       }
       messageEl.textContent = '🎉 Juist!';
-      messageEl.style.color = 'var(--green)';
+      messageEl.style.color = 'var(--green-text)';
       renderWord(current.correct);
       nextBtn.hidden = false;
       startAutoAdvanceBar(progressFill);
@@ -1524,7 +1524,7 @@ if (lettersWordEl) {
       wrongTotal++;
       wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `"${option}" is niet juist, probeer nog eens`;
-      messageEl.style.color = 'var(--pink)';
+      messageEl.style.color = 'var(--pink-text)';
     }
   }
 
@@ -1708,7 +1708,7 @@ if (zinnenSentenceEl) {
         scoreEl.textContent = String(score);
       }
       messageEl.textContent = '🎉 Juist!';
-      messageEl.style.color = 'var(--green)';
+      messageEl.style.color = 'var(--green-text)';
       renderSentence(current.correct);
       nextBtn.hidden = false;
       startAutoAdvanceBar(progressFill);
@@ -1720,7 +1720,7 @@ if (zinnenSentenceEl) {
       wrongTotal++;
       wrongStatEl.textContent = String(wrongTotal);
       messageEl.textContent = `"${option}" is niet juist, probeer nog eens`;
-      messageEl.style.color = 'var(--pink)';
+      messageEl.style.color = 'var(--pink-text)';
     }
   }
 
