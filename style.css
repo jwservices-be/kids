@@ -63,6 +63,13 @@ img { max-width: 100%; }
   flex-shrink: 0;
   margin-bottom: 0;
   white-space: nowrap;
+  background: var(--blue);
+  color: var(--dark);
+}
+
+.header-back:hover {
+  color: var(--dark);
+  filter: brightness(0.92);
 }
 
 .header-back-short { display: none; }

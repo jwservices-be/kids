@@ -577,6 +577,13 @@ if (diffPanelLeft) {
   nextBtn.addEventListener('click', goToNextScene);
   restartBtn.addEventListener('click', restartAll);
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && document.getElementById('verschillen').classList.contains('active')) {
+      e.preventDefault();
+      goToNextScene();
+    }
+  });
+
   newScene();
 }
 
@@ -847,6 +854,13 @@ if (vormenQuestionEl) {
 
   startSetupBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', newQuestion);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
+      e.preventDefault();
+      newQuestion();
+    }
+  });
   restartRoundBtn.addEventListener('click', backToSetup);
 
   window.addEventListener('routechange', (e) => {
@@ -1006,6 +1020,13 @@ if (getallenProblemEl) {
   startSetupBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', newProblem);
   restartRoundBtn.addEventListener('click', backToSetup);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
+      e.preventDefault();
+      newProblem();
+    }
+  });
 
   window.addEventListener('routechange', (e) => {
     if (e.detail.route !== 'getallen' && !playEl.hidden) backToSetup();
@@ -1189,6 +1210,13 @@ if (guessEmojiEl) {
   startSetupBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', newRound);
   restartRoundBtn.addEventListener('click', backToSetup);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
+      e.preventDefault();
+      newRound();
+    }
+  });
 
   window.addEventListener('routechange', (e) => {
     if (e.detail.route !== 'raad' && !playEl.hidden) backToSetup();
@@ -1620,6 +1648,13 @@ if (lettersWordEl) {
   nextBtn.addEventListener('click', newWord);
   restartRoundBtn.addEventListener('click', backToSetup);
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
+      e.preventDefault();
+      newWord();
+    }
+  });
+
   window.addEventListener('routechange', (e) => {
     if (e.detail.route !== 'letters' && !playEl.hidden) backToSetup();
   });
@@ -1816,6 +1851,13 @@ if (zinnenSentenceEl) {
   startSetupBtn.addEventListener('click', startRound);
   nextBtn.addEventListener('click', newSentence);
   restartRoundBtn.addEventListener('click', backToSetup);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !nextBtn.hidden && !playEl.hidden) {
+      e.preventDefault();
+      newSentence();
+    }
+  });
 
   window.addEventListener('routechange', (e) => {
     if (e.detail.route !== 'zinnen' && !playEl.hidden) backToSetup();
