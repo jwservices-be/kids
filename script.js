@@ -1363,6 +1363,7 @@ const rekenProblemEl = document.getElementById('reken-problem');
 
 if (rekenProblemEl) {
   const setupEl = document.getElementById('reken-setup');
+  const step2El = document.getElementById('reken-step2');
   const playEl = document.getElementById('reken-play');
   const modeButtons = document.querySelectorAll('.reken-mode');
   const maxInput = document.getElementById('reken-max-input');
@@ -1506,6 +1507,9 @@ if (rekenProblemEl) {
   function backToSetup() {
     playEl.hidden = true;
     setupEl.hidden = false;
+    step2El.hidden = true;
+    modeButtons.forEach((b) => b.classList.remove('active'));
+    mode = null;
   }
 
   modeButtons.forEach((btn) => {
@@ -1513,7 +1517,7 @@ if (rekenProblemEl) {
       modeButtons.forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
       mode = btn.dataset.mode;
-      startBtn.disabled = false;
+      step2El.hidden = false;
     });
   });
 
