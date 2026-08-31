@@ -729,6 +729,7 @@ if (vormenQuestionEl) {
   let advanceTimeout = null;
 
   clampInputRange(countInput, 1, 12);
+  persistInput(countInput, 'vormen-count');
 
   let current = null;
   let score = 0;
@@ -880,6 +881,8 @@ if (getallenProblemEl) {
 
   clampInputRange(maxInput, 10, 99);
   clampInputRange(countInput, 1, 99);
+  persistInput(maxInput, 'getallen-max');
+  persistInput(countInput, 'getallen-count');
 
   let maxNumber = 20;
   let answer = null;
@@ -1068,6 +1071,7 @@ if (guessEmojiEl) {
   let advanceTimeout = null;
 
   clampInputRange(countInput, 1, 30);
+  persistInput(countInput, 'guess-count');
 
   const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   let current = null;
@@ -1205,6 +1209,8 @@ if (rekenProblemEl) {
   const countInput = document.getElementById('reken-count-input');
   clampInputRange(countInput, 1, 99);
   clampInputRange(maxInput, 1, 99);
+  persistInput(countInput, 'reken-count');
+  persistInput(maxInput, 'reken-max');
   const startBtn = document.getElementById('reken-start');
   const scoreEl = document.getElementById('reken-score');
   const countEl = document.getElementById('reken-count');
@@ -1500,6 +1506,7 @@ if (lettersWordEl) {
   let advanceTimeout = null;
 
   clampInputRange(countInput, 1, 99);
+  persistInput(countInput, 'letters-count');
 
   let current = null;
   let score = 0;
@@ -1696,6 +1703,7 @@ if (zinnenSentenceEl) {
   let advanceTimeout = null;
 
   clampInputRange(countInput, 1, 50);
+  persistInput(countInput, 'zinnen-count');
 
   let current = null;
   let score = 0;
