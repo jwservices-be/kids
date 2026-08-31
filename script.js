@@ -61,6 +61,7 @@ function setDoneMessage(ratio, emojiId, titleId) {
 // ---------- Simple page router ----------
 const homeView = document.getElementById('home-view');
 const gamePages = document.querySelectorAll('.game-page');
+const headerBack = document.getElementById('header-back');
 
 function showRoute(route) {
   const isHome = !route || route === 'home';
@@ -68,6 +69,7 @@ function showRoute(route) {
   gamePages.forEach((page) => {
     page.classList.toggle('active', !isHome && page.id === route);
   });
+  if (headerBack) headerBack.hidden = isHome;
   window.scrollTo({ top: 0 });
   window.dispatchEvent(new CustomEvent('routechange', { detail: { route } }));
 }
